@@ -66,11 +66,16 @@ async function queryPendingOrders(blockTimestamp) {
 }
 
 export default async function handler(req, res) {
-  const blockTime = await getCurrentBlockTimestampWithRetry();
-  console.log("blocktime ", blockTime);
-  const orders = await queryPendingOrders(blockTime);
+  const queriesBlockTime = req.query?.blocktime;
+
+  let timestamp = queriesBlockTime;
+  if (!queriesBlockTime) {
+    const blockTime = await getCurrentBlockTimestampWithRetry();
+    timestamp = blockTime;
+  }
+  const orders = await queryPendingOrders(timestamp);
 
   const orderIds = orders?.map((ele) => ele?.orderId);
 
-  res.status(200).json({ blockTime, orders });
+  res.status(200).json({ queriesBlockTime, orderIds });
 }
