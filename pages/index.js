@@ -7,6 +7,7 @@ import Header from "../components/resuableComponents/Header";
 import { useTopPoolInfo } from "../hooks/useTopPoolsInfo";
 import TradeCard from "../components/Trade/TradeCard";
 import SideBar from "../common/Sidebar";
+import SocialData from "../components/Social/SocialData";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -101,7 +102,7 @@ const Home = () => {
 
       {pageLoaded && (
         <Grid container justifyContent={"center"}>
-          <Grid item md={8} sm={12} xs={12}>
+          <Grid item md={10} sm={12} xs={12}>
             <Header />
             <Box className={classes.background}>
               <Container>
@@ -115,10 +116,12 @@ const Home = () => {
                   <Grid item md={3}>
                     <SideBar />
                   </Grid>
-                  <Grid item md={6}>
+                  <Grid item md={5}>
                     <TradeCard />
                   </Grid>
-                  <Grid item md={3}></Grid>
+                  <Grid item md={4}>
+                    <SocialData />
+                  </Grid>
                 </Grid>
               </Container>
             </Box>

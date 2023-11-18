@@ -18,6 +18,19 @@ export const getUserData = async (address) => {
   return response;
 };
 
+export const getProfileDataWeb3 = async (userAddress) => {
+  let url = `https://api.web3.bio/profile/${userAddress}`;
+  let response = axios
+    .get(url)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return response;
+};
+
 export const getLatestPrice = async () => {
   let url = `${baseUrl}/order-apis/v1/latest-price`;
   let response = axios
