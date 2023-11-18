@@ -75,7 +75,7 @@ export default async function handler(req, res) {
   }
   const orders = await queryPendingOrders(timestamp);
 
-  const orderIds = orders?.map((ele) => ele?.orderId);
+  const orderIds = orders?.map((ele) => parseInt(ele?.orderId));
 
   res.status(200).json({ queriesBlockTime, orderIds });
 }
