@@ -147,7 +147,7 @@ const SideBar = ({}) => {
         <Box display={"flex"} justifyContent={"start"}>
           <Box pr={1}>
             <img
-              src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
+              src="https://as1.ftcdn.net/v2/jpg/05/99/32/28/1000_F_599322870_hufBazDahX69a57xhcprgfn4WSjAlXZj.jpg"
               style={{
                 color: "white",
                 height: 40,

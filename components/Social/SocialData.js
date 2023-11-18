@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
   summaryCardOther: {
     // backgroundColor: "#ffffff",
-
+    // url(''), linear-gradient(#e89e66, #E57A26)
     background: "linear-gradient(to bottom, #464646, #464646)",
     backgroundImage: `url(''), linear-gradient(#464646, #464646)`,
     backgroundSize: "cover",
@@ -178,6 +178,9 @@ export default function SocialData() {
     if (accountSC) {
       async function asyncFn() {
         let web3Data = await getProfileDataWeb3(accountSC);
+        if (web3Data && web3Data.identity === null) {
+          return;
+        }
         setSocialDataValues(web3Data);
         console.log(web3Data);
       }
@@ -191,7 +194,8 @@ export default function SocialData() {
       async function asyncFn() {
         let web3Data = await getSocialProfileDataWeb3([
           "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
-          accountSC,
+          "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448",
+          "ekinci.eth",
         ]);
 
         console.log(web3Data);
@@ -398,6 +402,47 @@ export default function SocialData() {
               )}
           </Box>
         )}
+
+        {!socialDataValues && (
+          <Box className={classes.summaryCard}>
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <Typography
+                fontSize={12}
+                fontWeight={600}
+                color={"#f9f9f9"}
+                textAlign={"center"}
+              >
+                <Box>
+                  <img
+                    src={
+                      "https://as1.ftcdn.net/v2/jpg/05/99/32/28/1000_F_599322870_hufBazDahX69a57xhcprgfn4WSjAlXZj.jpg"
+                    }
+                    height="100px"
+                    width="100px"
+                    style={{ borderRadius: "50%" }}
+                  />
+                </Box>
+                No Name
+              </Typography>
+
+              <Typography
+                variant="body2"
+                fontSize={12}
+                fontWeight={400}
+                color={"#ffffff"}
+                textAlign={"center"}
+              >
+                No data found,Please create NextId.
+              </Typography>
+            </Box>{" "}
+          </Box>
+        )}
+
         <Typography
           variant="body2"
           fontSize={14}
