@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: "#ffffff",
     // url(''), linear-gradient(#e89e66, #E57A26)
     background: "linear-gradient(to bottom, #464646, #464646)",
-    backgroundImage: `url(''), linear-gradient(#464646, #464646)`,
+    backgroundImage: `url(''), linear-gradient(#E5E4E2, #E5E4E2)`,
     backgroundSize: "cover",
     marginBottom: 5,
     paddingTop: 10,
@@ -84,11 +84,11 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: "#ffffff",
 
     background: "linear-gradient(to bottom, #D72B66, #D72B66)",
-    backgroundImage: `url(''), linear-gradient(#d67595, #D72B66)`,
+    backgroundImage: `url(''), linear-gradient(#808080, #808080)`,
     backgroundSize: "cover",
     marginBottom: 5,
-    paddingTop: 40,
-    paddingBottom: 40,
+    paddingTop: 30,
+    paddingBottom: 20,
     paddingLeft: 14,
     paddingRight: 14,
     width: "100%",
@@ -414,7 +414,7 @@ export default function SocialData() {
               <Typography
                 fontSize={12}
                 fontWeight={600}
-                color={"#f9f9f9"}
+                color={"black"}
                 textAlign={"center"}
               >
                 <Box>
@@ -464,7 +464,7 @@ export default function SocialData() {
                     style={{
                       backgroundImage:
                         index === 1 &&
-                        `url(''), linear-gradient(#e89e66, #E57A26)`,
+                        `url(''), linear-gradient(#E5E4E2, #E5E4E2)`,
                     }}
                   >
                     <Box
@@ -491,7 +491,7 @@ export default function SocialData() {
                         <Typography
                           fontSize={12}
                           fontWeight={600}
-                          color={"#f9f9f9"}
+                          color={"#272727"}
                           textAlign={"center"}
                         >
                           {singleUserData[1].displayName}
@@ -500,7 +500,7 @@ export default function SocialData() {
                           variant="body2"
                           fontSize={12}
                           fontWeight={400}
-                          color={"#ffffff"}
+                          color={"#272727"}
                           textAlign={"center"}
                         >
                           {singleUserData && singleUserData[1].identity}
