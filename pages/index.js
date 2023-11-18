@@ -93,15 +93,15 @@ const Home = () => {
   return (
     <Box style={{ backgroundColor: "#f9f9f9" }}>
       <Seo
-        title="NextJs | Starter Kit"
-        description="NextJs Starter Kit"
+        title="SleepSwap - Beat The Inflation"
+        description="SleepSwap - Beat The Inflation project is developed in the Eth Istanbul Hackathon"
         keywords="NextJs Starter Kit"
-        image="https://mobisoftinfotech.com/resources/wp-content/uploads/2022/04/next-JS-framework.png"
+        image="SleepSwap_Thumb.jpg"
       />
 
       {pageLoaded && (
         <Grid container justifyContent={"center"}>
-          <Grid item md={8} sm={12} xs={12}>
+          <Grid item md={9} sm={12} xs={12}>
             <Header />
             <Box className={classes.background}>
               <Container>
