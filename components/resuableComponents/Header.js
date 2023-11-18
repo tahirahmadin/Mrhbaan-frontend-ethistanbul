@@ -88,8 +88,6 @@ const Header = () => {
 
   return (
     <Box className={classes.background}>
-      {console.log("accountSC")}
-      {console.log(accountSC)}
       <Container>
         <header>
           <Box
@@ -97,7 +95,6 @@ const Header = () => {
               color: theme.palette.primary.contrastText,
               display: !md && "flex",
               paddingTop: "1rem",
-              paddingBottom: "1rem",
               alignItems: "center",
               justifyContent: !md && "flex-end",
             }}
@@ -170,7 +167,8 @@ const Header = () => {
                       alignItems: "center",
                       gap: "5px",
                       height: 40,
-                      border: "2px solid" + theme.palette.secondary.main,
+
+                      backgroundColor: "white",
                       borderRadius: 4,
                       marginRight: 1,
                       fontWeight: 500,

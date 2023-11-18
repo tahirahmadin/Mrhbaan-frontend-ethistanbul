@@ -43,3 +43,18 @@ export const tradingInstance = (provider = "unavailable") => {
     return null;
   }
 };
+
+export const eatTheDipInstance = (provider = "unavailable") => {
+  try {
+    var web3 = web3Instance(provider);
+    var eatTheDipContract = new web3.eth.Contract(
+      SleepSwapMasterChef,
+      constants.contracts.eatTheDip
+    );
+
+    return eatTheDipContract;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};

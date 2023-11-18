@@ -18,6 +18,7 @@ export const constants = {
   contracts: {
     fiat: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
     trading: "0xD73624a0aaa1cc718Bea517A77868666B6082819",
+    eatTheDip: "0xD73624a0aaa1cc718Bea517A77868666B6082819",
   },
 };
 

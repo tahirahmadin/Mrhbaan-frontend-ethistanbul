@@ -1,30 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { FormControl, MenuItem } from "@mui/material";
+import { CircularProgress, FormControl, MenuItem } from "@mui/material";
 import {
   Box,
   Button,
-  IconButton,
-  InputLabel,
-  Select,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 
 import { constants } from "../../utils/constants";
-import { Close } from "@mui/icons-material";
 import { tokenInstance, tradingInstance } from "../../contracts";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
 import ethersServiceProvider from "../../services/ethersServiceProvider";
 import web3 from "../../web3";
 import { toWei } from "../../utils/helper";
 import { ethers } from "ethers";
-import {
-  checkUSDTApproved,
-  getUserUSDTBalance,
-} from "../../actions/smartActions";
-import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
+import { checkUSDTApproved } from "../../actions/smartActions";
+import { useSelector } from "react-redux";
+import EatTheDip from "./EatTheDip";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -140,12 +134,16 @@ export default function TradeCard() {
   const classes = useStyles();
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
+  const store = useSelector((state) => state);
+  const { menuIndex } = store.ui;
 
   const [amount, setAmount] = useState("10");
   const [token, setToken] = useState("Ethereum");
   const [frequency, setFrequency] = useState(1);
   const [time, setTime] = useState(1);
   const [stakeCase, setStakeCase] = useState(0);
+  const [approveCase, setApproveCase] = useState(0);
+  const [refetch, setRefetch] = useState(0);
   const [isApproved, setIsApproved] = useState(false);
   const [totalValue, setTotalValue] = useState(0);
 
@@ -157,16 +155,14 @@ export default function TradeCard() {
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
-        let provider = ethersServiceProvider.web3AuthInstance;
         let trading_contract = constants.contracts.fiat;
         let res = await checkUSDTApproved(accountSC, trading_contract);
-        console.log("res");
-        console.log(res);
+
         setIsApproved(parseInt(res) > 0);
       }
       asyncFn();
     }
-  }, [accountSC]);
+  }, [accountSC, refetch]);
 
   useEffect(() => {
     if (amount && time && frequency) {
@@ -192,6 +188,7 @@ export default function TradeCard() {
 
   async function getCurrentBlockTimestamp() {
     const polygonNodeUrl = "https://polygon-rpc.com";
+    // https://polygon-mainnet.g.alchemy.com/v2/38R9Vnxi-6UPne8ACF4k4radrS8-6UJ1
     const provider = new ethers.providers.JsonRpcProvider(polygonNodeUrl);
 
     // Get the current block number
@@ -220,24 +217,23 @@ export default function TradeCard() {
   }
 
   const handleApprove = async () => {
-    setStakeCase(1);
+    setApproveCase(1);
 
     let userAddress = accountSC;
     let trading_contract = constants.contracts.trading;
     let provider = ethersServiceProvider.web3AuthInstance;
-    console.log(provider);
 
-    let data = await provider.getUserInfo();
-    console.log(data);
+    let finalAmountToApprove = toWei(totalValue.toString(), 18);
+
     let tokenContract = tokenInstance(provider.web3Auth.provider);
     try {
       let estimateGas = await tokenContract.methods
-        .approve(trading_contract, "10000000000000000000000000000")
+        .approve(trading_contract, finalAmountToApprove)
         .estimateGas({ from: userAddress });
 
       let estimateGasPrice = await web3.eth.getGasPrice();
       const response = await tokenContract.methods
-        .approve(trading_contract, "10000000000000000000000000000")
+        .approve(trading_contract, finalAmountToApprove)
         .send(
           {
             from: userAddress,
@@ -249,26 +245,26 @@ export default function TradeCard() {
           },
           async function (error, transactionHash) {
             if (transactionHash) {
-              setStakeCase(2);
+              setApproveCase(2);
             } else {
-              setStakeCase(4);
+              setApproveCase(0);
             }
           }
         )
         .on("receipt", async function (receipt) {
           setStakeCase(3);
-          // setResetFlag(resetFlag + 1);
+          setRefetch(refetch + 1);
         })
         .on("error", async function (error) {
           if (error?.code === 4001) {
-            setStakeCase(4);
+            setApproveCase(0);
           } else {
-            setStakeCase(4);
+            setApproveCase(0);
           }
         });
     } catch (err) {
       console.log(err);
-      setStakeCase(4);
+      setApproveCase(0);
     }
   };
 
@@ -276,25 +272,20 @@ export default function TradeCard() {
     setStakeCase(1);
 
     let userAddress = accountSC;
-    let trading_contract = constants.contracts.trading;
     let provider = ethersServiceProvider.web3AuthInstance;
-    console.log(provider);
+
     const amount0 = toWei(amount.toString(), 6);
     const amount1 = toWei("0");
     const token0 = usdtPolygon;
     const token1 = wmaticPolygon;
     const startTimes = await generateTimestampSeries();
 
-    console.log("amounts ", { amount0, amount1 });
-
     const params = [startTimes, amount0, amount1, token0, token1];
 
-    console.log("params ", params);
-
     let data = await provider.getUserInfo();
-    console.log(data);
+
     let tradingContract = tradingInstance(provider.web3Auth.provider);
-    console.log(tradingContract);
+
     try {
       let estimateGas = await tradingContract.methods
         .startStrategyWithDeposit(...params)
@@ -316,7 +307,7 @@ export default function TradeCard() {
             if (transactionHash) {
               setStakeCase(2);
             } else {
-              setStakeCase(4);
+              setStakeCase(0);
             }
           }
         )
@@ -338,177 +329,235 @@ export default function TradeCard() {
   };
 
   return (
-    <Box pt={0} className={classes.card}>
-      <Box>
-        <Typography
-          variant="body2"
-          fontSize={20}
-          fontWeight={700}
-          color={"#000000"}
-          textAlign={"center"}
-          my={1}
-        >
-          Invest
-        </Typography>
-        <Box className={classes.summaryCard}>
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <Typography
-              fontSize={12}
-              fontWeight={600}
-              color={"#f9f9f9"}
-              textAlign={"center"}
-            >
-              <img
-                src="https://w7.pngwing.com/pngs/268/1013/png-transparent-ethereum-eth-hd-logo-thumbnail.png"
-                height="24px"
-                width="24px"
-                style={{ borderRadius: "50%" }}
-              />{" "}
-              Ethereum
-            </Typography>
-            <Typography
-              style={{ textTransform: "capitalize" }}
-              variant="body2"
-              fontWeight={500}
-              fontSize={md ? 14 : 12}
-              color={"#ffffff"}
-            >
-              Buy ${amount}/month
-            </Typography>
-          </Box>
+    <Box>
+      <Box pt={0} className={classes.card}>
+        {menuIndex === 0 && (
           <Box>
-            <Typography
-              variant="body2"
-              fontSize={12}
-              fontWeight={400}
-              color={"#f9f9f9"}
-              textAlign={"center"}
-            >
-              Total investment
-            </Typography>
-            <Typography
-              variant="h1"
-              fontSize={22}
-              fontWeight={600}
-              color={"#f9f9f9"}
-              textAlign={"center"}
-            >
-              ${totalValue}
-            </Typography>
-            <Typography
-              variant="body2"
-              fontSize={15}
-              fontWeight={600}
-              color={"#65CC6E"}
-              textAlign={"center"}
-            >
-              ROI +68%
-            </Typography>
+            {stakeCase === 0 && (
+              <Box>
+                <Typography
+                  variant="body2"
+                  fontSize={20}
+                  fontWeight={700}
+                  color={"#000000"}
+                  textAlign={"center"}
+                  my={1}
+                >
+                  Invest
+                </Typography>
+                <Box className={classes.summaryCard}>
+                  <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                  >
+                    <Typography
+                      fontSize={12}
+                      fontWeight={600}
+                      color={"#f9f9f9"}
+                      textAlign={"center"}
+                    >
+                      <img
+                        src="https://w7.pngwing.com/pngs/268/1013/png-transparent-ethereum-eth-hd-logo-thumbnail.png"
+                        height="24px"
+                        width="24px"
+                        style={{ borderRadius: "50%" }}
+                      />{" "}
+                      Ethereum
+                    </Typography>
+                    <Typography
+                      style={{ textTransform: "capitalize" }}
+                      variant="body2"
+                      fontWeight={500}
+                      fontSize={md ? 14 : 12}
+                      color={"#ffffff"}
+                    >
+                      Buy ${amount}/month
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      fontSize={12}
+                      fontWeight={400}
+                      color={"#f9f9f9"}
+                      textAlign={"center"}
+                    >
+                      Total investment
+                    </Typography>
+                    <Typography
+                      variant="h1"
+                      fontSize={22}
+                      fontWeight={600}
+                      color={"#f9f9f9"}
+                      textAlign={"center"}
+                    >
+                      ${totalValue}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontSize={13}
+                      fontWeight={600}
+                      color={"#65CC6E"}
+                      textAlign={"center"}
+                    >
+                      Previous ROI +68%
+                    </Typography>
+                  </Box>
+
+                  <Typography
+                    variant="body2"
+                    fontSize={12}
+                    fontWeight={400}
+                    color={"#ffffff"}
+                    textAlign={"center"}
+                  >
+                    If you bought over past 12 months
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="body2"
+                  fontSize={20}
+                  fontWeight={700}
+                  color={"#000000"}
+                  textAlign={"center"}
+                  mt={2}
+                >
+                  Start Dollar Cost Averaging
+                </Typography>
+                <Box className={classes.inputCard} mt={2}>
+                  <Typography
+                    fontSize={12}
+                    fontWeight={600}
+                    color={"#000000"}
+                    textAlign={"center"}
+                  >
+                    Buy{" "}
+                    <select
+                      id="mySelect"
+                      value={amount}
+                      onChange={(event) => setAmount(event.target.value)}
+                      className={classes.select}
+                    >
+                      <option value="10">$10</option>
+                      <option value="25">$25</option>
+                      <option value="50">$50</option>
+                    </select>{" "}
+                    of
+                    <select
+                      id="mySelect"
+                      value={token}
+                      onChange={(event) => setToken(event.target.value)}
+                      className={classes.select}
+                    >
+                      <option value="Ethereum">Ethereum</option>
+                      <option value="Bitcoin">Bitcoin</option>
+                      <option value="DAI">DAI</option>
+                    </select>
+                  </Typography>
+                  <Typography
+                    fontSize={12}
+                    fontWeight={600}
+                    color={"#000000"}
+                    textAlign={"center"}
+                  >
+                    every
+                    <select
+                      id="mySelect"
+                      value={frequency}
+                      onChange={(event) => setFrequency(event.target.value)}
+                      className={classes.select}
+                    >
+                      <option value="1">day</option>
+                      <option value="7">week</option>
+                      <option value="30">month</option>
+                    </select>{" "}
+                    for
+                    <select
+                      id="mySelect"
+                      value={time}
+                      onChange={(event) => setTime(event.target.value)}
+                      className={classes.select}
+                    >
+                      <option value="1">week</option>
+                      <option value="7">month</option>
+                      <option value="30">year</option>
+                    </select>
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    fontSize={12}
+                    fontWeight={400}
+                    color={"#414141"}
+                    textAlign={"center"}
+                  >
+                    Beat the inflation with Crypto!
+                  </Typography>
+                </Box>
+
+                <Button
+                  className={classes.buttonConnect}
+                  mt={2}
+                  disabled={!accountSC}
+                  onClick={isApproved ? handleStake : handleApprove}
+                >
+                  {isApproved ? "Buy Now" : "Approve Spending"}{" "}
+                  {(approveCase > 0 || stakeCase > 0) && (
+                    <CircularProgress
+                      size={18}
+                      style={{
+                        color: "white",
+                        marginLeft: 5,
+                      }}
+                    />
+                  )}
+                </Button>
+              </Box>
+            )}
+            {stakeCase === 3 && (
+              <Box>
+                <Typography
+                  variant="body2"
+                  fontSize={20}
+                  fontWeight={700}
+                  color={"#000000"}
+                  textAlign={"center"}
+                  my={1}
+                >
+                  Order placed successfully
+                </Typography>
+
+                <Box className="text-center">
+                  {" "}
+                  <img
+                    src="https://img.freepik.com/premium-vector/green-check-mark-3d-icon-vector-illustration_567896-126.jpg"
+                    height="120px"
+                    width="120px"
+                    style={{ borderRadius: "50%" }}
+                  />{" "}
+                </Box>
+                <Typography
+                  variant="body2"
+                  fontSize={12}
+                  fontWeight={400}
+                  color={"#414141"}
+                  textAlign={"center"}
+                  my={1}
+                >
+                  Accumulation order of <strong>{token}</strong> for every{" "}
+                  <strong>{frequency}</strong> days for an amount of{" "}
+                  <strong>{amount}</strong> has been submitted to our strategy
+                  pool.
+                </Typography>
+                <Button className={classes.buttonConnect} mt={2}>
+                  View Analytics
+                </Button>
+              </Box>
+            )}
           </Box>
-
-          <Typography
-            variant="body2"
-            fontSize={12}
-            fontWeight={400}
-            color={"#ffffff"}
-            textAlign={"center"}
-          >
-            If you bought over past 12 months
-          </Typography>
-        </Box>
-        <Typography
-          variant="body2"
-          fontSize={20}
-          fontWeight={700}
-          color={"#000000"}
-          textAlign={"center"}
-          mt={2}
-        >
-          Start Dollar Cost Averaging
-        </Typography>
-        <Box className={classes.inputCard} mt={2}>
-          <Typography
-            fontSize={12}
-            fontWeight={600}
-            color={"#000000"}
-            textAlign={"center"}
-          >
-            Buy{" "}
-            <select
-              id="mySelect"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
-              className={classes.select}
-            >
-              <option value="10">$10</option>
-              <option value="25">$25</option>
-              <option value="50">$50</option>
-            </select>{" "}
-            of
-            <select
-              id="mySelect"
-              value={token}
-              onChange={(event) => setToken(event.target.value)}
-              className={classes.select}
-            >
-              <option value="Ethereum">Ethereum</option>
-              <option value="Bitcoin">Bitcoin</option>
-              <option value="DAI">DAI</option>
-            </select>
-          </Typography>
-          <Typography
-            fontSize={12}
-            fontWeight={600}
-            color={"#000000"}
-            textAlign={"center"}
-          >
-            every
-            <select
-              id="mySelect"
-              value={frequency}
-              onChange={(event) => setFrequency(event.target.value)}
-              className={classes.select}
-            >
-              <option value="1">day</option>
-              <option value="7">week</option>
-              <option value="30">month</option>
-            </select>{" "}
-            for
-            <select
-              id="mySelect"
-              value={time}
-              onChange={(event) => setTime(event.target.value)}
-              className={classes.select}
-            >
-              <option value="1">week</option>
-              <option value="7">month</option>
-              <option value="30">year</option>
-            </select>
-          </Typography>
-
-          <Typography
-            variant="body2"
-            fontSize={12}
-            fontWeight={400}
-            color={"#414141"}
-            textAlign={"center"}
-          >
-            Beat the inflation with Crypto!
-          </Typography>
-        </Box>
-
-        <Button
-          className={classes.buttonConnect}
-          mt={2}
-          disabled={!accountSC}
-          onClick={isApproved ? handleStake : handleApprove}
-        >
-          {isApproved ? "Buy Now" : "Approve Spending"}
-        </Button>
+        )}
+        {menuIndex === 1 && <EatTheDip />}
       </Box>
     </Box>
   );

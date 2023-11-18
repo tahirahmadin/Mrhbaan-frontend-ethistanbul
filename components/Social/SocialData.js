@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import { FormControl, MenuItem } from "@mui/material";
+
 import {
   Box,
-  Button,
   IconButton,
-  InputLabel,
-  Select,
   Typography,
   useMediaQuery,
   useTheme,
@@ -22,18 +19,11 @@ import {
   MyLocation,
   Twitter,
 } from "@mui/icons-material";
-import { tokenInstance, tradingInstance } from "../../contracts";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import ethersServiceProvider from "../../services/ethersServiceProvider";
-import web3 from "../../web3";
-import { toWei } from "../../utils/helper";
-import { ethers } from "ethers";
 import {
-  checkUSDTApproved,
-  getUserUSDTBalance,
-} from "../../actions/smartActions";
-import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
-import { getProfileDataWeb3 } from "../../actions/serverActions";
+  getProfileDataWeb3,
+  getSocialProfileDataWeb3,
+} from "../../actions/serverActions";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -46,6 +36,37 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     border: "10px solid #f9f9f9",
+    boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
+    borderRadius: "1rem",
+
+    [theme.breakpoints.down("md")]: {
+      height: "100%",
+      width: "100%",
+      paddingTop: 21,
+      paddingBottom: 21,
+      paddingLeft: 21,
+      paddingRight: 21,
+      maxHeight: 160,
+    },
+  },
+
+  summaryCardOther: {
+    // backgroundColor: "#ffffff",
+
+    background: "linear-gradient(to bottom, #464646, #464646)",
+    backgroundImage: `url(''), linear-gradient(#464646, #464646)`,
+    backgroundSize: "cover",
+    marginBottom: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 14,
+    paddingRight: 14,
+    width: "100%",
+    height: "100%",
+    minHeight: 60,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: "1rem",
 
@@ -148,25 +169,33 @@ export default function SocialData() {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [amount, setAmount] = useState("10");
-  const [token, setToken] = useState("Ethereum");
-  const [frequency, setFrequency] = useState(1);
-  const [time, setTime] = useState(1);
-  const [stakeCase, setStakeCase] = useState(0);
-  const [isApproved, setIsApproved] = useState(false);
-  const [totalValue, setTotalValue] = useState(0);
-  const [socialDataValues, setSocialDataValues] = useState(0);
+  const [socialDataValues, setSocialDataValues] = useState(null);
+  const [topUsersData, setTopUsersData] = useState([]);
 
   const { accountSC } = useWeb3Auth();
 
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
-        let web3Data = await getProfileDataWeb3(
-          "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448"
-        );
+        let web3Data = await getProfileDataWeb3(accountSC);
         setSocialDataValues(web3Data);
         console.log(web3Data);
+      }
+
+      asyncFn();
+    }
+  }, [accountSC]);
+
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let web3Data = await getSocialProfileDataWeb3([
+          "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          accountSC,
+        ]);
+
+        console.log(web3Data);
+        setTopUsersData(web3Data);
       }
 
       asyncFn();
@@ -183,7 +212,7 @@ export default function SocialData() {
           textAlign={"center"}
           my={1}
         >
-          Social Profile
+          My Social Profile
         </Typography>
         {socialDataValues && socialDataValues.length > 1 && (
           <Box className={classes.summaryCard}>
@@ -369,10 +398,77 @@ export default function SocialData() {
               )}
           </Box>
         )}
-
-        {/* <Button className={classes.buttonConnect} mt={2}>
-          View Profile
-        </Button> */}
+        <Typography
+          variant="body2"
+          fontSize={14}
+          fontWeight={700}
+          color={"#000000"}
+          textAlign={"center"}
+          my={1}
+        >
+          Top users
+        </Typography>
+        {topUsersData.length > 0 && (
+          <Box>
+            {topUsersData.map((singleUserData, index) => {
+              return (
+                singleUserData &&
+                singleUserData[1] && (
+                  <Box
+                    className={classes.summaryCardOther}
+                    style={{
+                      backgroundImage:
+                        index === 1 &&
+                        `url(''), linear-gradient(#e89e66, #E57A26)`,
+                    }}
+                  >
+                    <Box
+                      display={"flex"}
+                      flexDirection={"row"}
+                      justifyContent={"flex-start"}
+                      alignItems={"center"}
+                    >
+                      <Box>
+                        <img
+                          src={singleUserData[1].avatar}
+                          height="30px"
+                          width="30px"
+                          style={{ borderRadius: "50%" }}
+                        />
+                      </Box>
+                      <Box
+                        ml={1}
+                        display={"flex"}
+                        flexDirection={"column"}
+                        justifyContent={"flex-start"}
+                        alignItems={"flex-start"}
+                      >
+                        <Typography
+                          fontSize={12}
+                          fontWeight={600}
+                          color={"#f9f9f9"}
+                          textAlign={"center"}
+                        >
+                          {singleUserData[1].displayName}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontSize={12}
+                          fontWeight={400}
+                          color={"#ffffff"}
+                          textAlign={"center"}
+                        >
+                          {singleUserData && singleUserData[1].identity}
+                        </Typography>
+                      </Box>
+                    </Box>{" "}
+                  </Box>
+                )
+              );
+            })}
+          </Box>
+        )}
+        {}
       </Box>
     </Box>
   );

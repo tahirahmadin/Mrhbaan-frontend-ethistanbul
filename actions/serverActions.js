@@ -31,6 +31,19 @@ export const getProfileDataWeb3 = async (userAddress) => {
   return response;
 };
 
+export const getSocialProfileDataWeb3 = async (addresses) => {
+  let finalData = await addresses.map(async (singleAddress) => {
+    let res = await getProfileDataWeb3(singleAddress);
+
+    return res;
+  });
+  let resultObject = await Promise.all(finalData).then((output) => {
+    return output;
+  });
+  console.log(resultObject);
+  return resultObject;
+};
+
 export const getLatestPrice = async () => {
   let url = `${baseUrl}/order-apis/v1/latest-price`;
   let response = axios

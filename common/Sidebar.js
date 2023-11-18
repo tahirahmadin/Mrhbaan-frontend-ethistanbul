@@ -9,6 +9,7 @@ import {
   EmojiEvents,
   History,
   Logout,
+  Savings,
 } from "@mui/icons-material";
 import { setMenuIndex, setUsdtBalanceOfUser } from "../reducers/UiReducer";
 import { constants } from "../utils/constants";
@@ -189,7 +190,7 @@ const SideBar = ({}) => {
               bgcolor: menuIndex === 0 ? "#EEEFF3" : "transparent",
             }}
           >
-            <Dashboard
+            <Savings
               style={{
                 marginRight: 10,
                 color: menuIndex === 0 ? "#000000" : "#bdbdbd",
@@ -202,12 +203,12 @@ const SideBar = ({}) => {
                 menuIndex === 0 ? classes.selectedMenuTitle : classes.menuTitle
               }
             >
-              Dashboard
+              Beat The Inflation
             </Typography>
           </Box>
           <Box
             onClick={() => dispatch(setMenuIndex(1))}
-            key={1}
+            key={0}
             className={classes.selectedPaper}
             sx={{
               boxShadow: 0,
@@ -227,7 +228,7 @@ const SideBar = ({}) => {
                 menuIndex === 1 ? classes.selectedMenuTitle : classes.menuTitle
               }
             >
-              Accumulate
+              Eat The Dip
             </Typography>
           </Box>
           <Box
@@ -239,7 +240,7 @@ const SideBar = ({}) => {
               bgcolor: menuIndex === 2 ? "#EEEFF3" : "transparent",
             }}
           >
-            <History
+            <Dashboard
               style={{
                 marginRight: 10,
                 color: menuIndex === 2 ? "#000000" : "#bdbdbd",
@@ -250,6 +251,31 @@ const SideBar = ({}) => {
               variant="title1"
               className={
                 menuIndex === 2 ? classes.selectedMenuTitle : classes.menuTitle
+              }
+            >
+              Portfolio
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => dispatch(setMenuIndex(3))}
+            key={1}
+            className={classes.selectedPaper}
+            sx={{
+              boxShadow: 0,
+              bgcolor: menuIndex === 3 ? "#EEEFF3" : "transparent",
+            }}
+          >
+            <History
+              style={{
+                marginRight: 10,
+                color: menuIndex === 3 ? "#000000" : "#bdbdbd",
+              }}
+            />
+
+            <Typography
+              variant="title1"
+              className={
+                menuIndex === 3 ? classes.selectedMenuTitle : classes.menuTitle
               }
             >
               History
