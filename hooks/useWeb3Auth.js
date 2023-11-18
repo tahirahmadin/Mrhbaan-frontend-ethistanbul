@@ -175,11 +175,11 @@ export const useWeb3Auth = () => {
   const _disconnect = async () => {
     let instance = ethersServiceProvider.web3AuthInstance;
 
-    if (instance) {
-      if (instance.status != "connected") {
+    if (instance.web3Auth) {
+      if (instance.web3Auth.status != "connected") {
         return;
       } else {
-        await instance.logout();
+        await instance.signOut();
         ethersServiceProvider.setCurrentWeb3AuthInstance(instance);
         ethersServiceProvider.setCurrentAccount(null);
         await dispatch(setWalletStatus(walletStatus + 1));

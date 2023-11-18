@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, useTheme, Typography, Paper, useMediaQuery } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,10 +10,11 @@ import {
   History,
   Logout,
 } from "@mui/icons-material";
-import { setMenuIndex } from "../reducers/UiReducer";
+import { setMenuIndex, setUsdtBalanceOfUser } from "../reducers/UiReducer";
 import { constants } from "../utils/constants";
 import { useRouter } from "next/router";
 import { useWeb3Auth } from "../hooks/useWeb3Auth";
+import { getUserUSDTBalance } from "../actions/smartActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,9 +66,20 @@ const SideBar = ({}) => {
   const theme = useTheme();
 
   const sm = useMediaQuery(theme.breakpoints.down("md"));
-  const { menuIndex } = store.ui;
+  const { menuIndex, usdtBalance } = store.ui;
 
-  const { disconnect } = useWeb3Auth();
+  const { disconnect, accountSC } = useWeb3Auth();
+
+  // Get USDT Balance in account
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let res = await getUserUSDTBalance(accountSC);
+        await dispatch(setUsdtBalanceOfUser(res));
+      }
+      asyncFn();
+    }
+  }, [accountSC]);
 
   const menuItems = [
     {
@@ -107,6 +119,7 @@ const SideBar = ({}) => {
       ),
     },
   ];
+
   return (
     <Box
       px={2}
@@ -154,7 +167,7 @@ const SideBar = ({}) => {
                 fontWeight: 600,
               }}
             >
-              $23,435
+              ${usdtBalance}
             </Typography>
 
             <Typography

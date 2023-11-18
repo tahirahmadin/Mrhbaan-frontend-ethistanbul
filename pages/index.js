@@ -101,7 +101,7 @@ const Home = () => {
 
       {pageLoaded && (
         <Grid container justifyContent={"center"}>
-          <Grid item md={9} sm={12} xs={12}>
+          <Grid item md={8} sm={12} xs={12}>
             <Header />
             <Box className={classes.background}>
               <Container>
@@ -115,7 +115,7 @@ const Home = () => {
                   <Grid item md={3}>
                     <SideBar />
                   </Grid>
-                  <Grid item md={5}>
+                  <Grid item md={6}>
                     <TradeCard />
                   </Grid>
                   <Grid item md={3}></Grid>

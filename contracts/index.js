@@ -7,9 +7,7 @@ import { constants } from "../utils/constants";
 const web3Instance = (provider) => {
   if (provider === "unavailable") {
     const rpcProvider =
-      constants.net === 1
-        ? `https://rpc-mumbai.maticvigil.com`
-        : `https://polygon-mainnet.g.alchemy.com/v2/38R9Vnxi-6UPne8ACF4k4radrS8-6UJ1`;
+      "https://polygon-mainnet.g.alchemy.com/v2/38R9Vnxi-6UPne8ACF4k4radrS8-6UJ1";
     return new Web3(new Web3.providers.HttpProvider(rpcProvider));
   } else {
     return new Web3(provider);

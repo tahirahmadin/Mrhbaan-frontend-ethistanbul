@@ -12,14 +12,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import ethersServiceProvider from "../../services/ethersServiceProvider";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import { Redeem, Wallet } from "@mui/icons-material";
+import { Wallet } from "@mui/icons-material";
 import { Container } from "@mui/system";
-import { tokenInstance } from "../../contracts";
-import { getUserUSDTBalance } from "../../actions/smartActions";
-import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
   background: {

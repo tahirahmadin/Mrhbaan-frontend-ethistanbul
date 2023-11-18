@@ -20,6 +20,11 @@ import ethersServiceProvider from "../../services/ethersServiceProvider";
 import web3 from "../../web3";
 import { toWei } from "../../utils/helper";
 import { ethers } from "ethers";
+import {
+  checkUSDTApproved,
+  getUserUSDTBalance,
+} from "../../actions/smartActions";
+import { setUsdtBalanceOfUser } from "../../reducers/UiReducer";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -31,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 14,
     width: "100%",
     height: "100%",
-    border: "1px solid #f9f9f9",
+    border: "10px solid #f9f9f9",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: "1rem",
     "&:hover": {
@@ -60,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 14,
     width: "100%",
     height: "100%",
-    minHeight: 150,
+    minHeight: 170,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-around",
@@ -111,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     borderRadius: "0.5625rem",
     width: "100%",
+    height: 44,
     "&:hover": {
       backgroundColor: "#6385f3",
       color: "white",
@@ -137,18 +143,36 @@ export default function TradeCard() {
 
   const [amount, setAmount] = useState("10");
   const [token, setToken] = useState("Ethereum");
-  const [frequency, setFrequency] = useState("1");
-  const [time, setTime] = useState("1");
+  const [frequency, setFrequency] = useState(1);
+  const [time, setTime] = useState(1);
   const [stakeCase, setStakeCase] = useState(0);
+  const [isApproved, setIsApproved] = useState(false);
+  const [totalValue, setTotalValue] = useState(0);
 
-  const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
+  const { accountSC } = useWeb3Auth();
 
   const wmaticPolygon = "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270";
   const usdtPolygon = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
 
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-  };
+  useEffect(() => {
+    if (accountSC) {
+      async function asyncFn() {
+        let provider = ethersServiceProvider.web3AuthInstance;
+        let trading_contract = constants.contracts.fiat;
+        let res = await checkUSDTApproved(accountSC, trading_contract);
+        console.log("res");
+        console.log(res);
+        setIsApproved(parseInt(res) > 0);
+      }
+      asyncFn();
+    }
+  }, [accountSC]);
+
+  useEffect(() => {
+    if (amount && time && frequency) {
+      setTotalValue(amount * time * frequency);
+    }
+  }, [amount, time, frequency]);
 
   const widget = async () => {
     const response = await fetch(
@@ -188,7 +212,7 @@ export default function TradeCard() {
 
     // Generate 5 timestamps with an increasing 10-minute interval
     for (let i = 0; i < 5; i++) {
-      const timestamp = currentTimestamp + i * 600; // 600 seconds = 10 minutes
+      const timestamp = currentTimestamp + i * 86400; // 86400 seconds = 1 day
       timestamps.push(timestamp);
     }
 
@@ -208,12 +232,12 @@ export default function TradeCard() {
     let tokenContract = tokenInstance(provider.web3Auth.provider);
     try {
       let estimateGas = await tokenContract.methods
-        .approve(trading_contract, "100000000000000000000000000")
+        .approve(trading_contract, "10000000000000000000000000000")
         .estimateGas({ from: userAddress });
 
       let estimateGasPrice = await web3.eth.getGasPrice();
       const response = await tokenContract.methods
-        .approve(trading_contract, "100000000000000000000000000")
+        .approve(trading_contract, "10000000000000000000000000000")
         .send(
           {
             from: userAddress,
@@ -255,7 +279,7 @@ export default function TradeCard() {
     let trading_contract = constants.contracts.trading;
     let provider = ethersServiceProvider.web3AuthInstance;
     console.log(provider);
-    const amount0 = toWei("2", 6);
+    const amount0 = toWei(amount.toString(), 6);
     const amount1 = toWei("0");
     const token0 = usdtPolygon;
     const token1 = wmaticPolygon;
@@ -353,28 +377,36 @@ export default function TradeCard() {
               fontSize={md ? 14 : 12}
               color={"#ffffff"}
             >
-              Buy $10/month
+              Buy ${amount}/month
             </Typography>
           </Box>
           <Box>
-            {" "}
             <Typography
-              variant="h3"
-              fontSize={18}
+              variant="body2"
+              fontSize={12}
+              fontWeight={400}
+              color={"#f9f9f9"}
+              textAlign={"center"}
+            >
+              Total investment
+            </Typography>
+            <Typography
+              variant="h1"
+              fontSize={22}
               fontWeight={600}
               color={"#f9f9f9"}
               textAlign={"center"}
             >
-              $1000
+              ${totalValue}
             </Typography>
             <Typography
               variant="body2"
-              fontSize={18}
+              fontSize={15}
               fontWeight={600}
               color={"#65CC6E"}
               textAlign={"center"}
             >
-              +$12
+              ROI +68%
             </Typography>
           </Box>
 
@@ -468,21 +500,14 @@ export default function TradeCard() {
             Beat the inflation with Crypto!
           </Typography>
         </Box>
+
         <Button
           className={classes.buttonConnect}
           mt={2}
           disabled={!accountSC}
-          onClick={handleApprove}
+          onClick={isApproved ? handleStake : handleApprove}
         >
-          Approve
-        </Button>
-        <Button
-          className={classes.buttonConnect}
-          mt={2}
-          disabled={!accountSC}
-          onClick={handleStake}
-        >
-          Buy Now
+          {isApproved ? "Buy Now" : "Approve Spending"}
         </Button>
       </Box>
     </Box>

@@ -1,4 +1,5 @@
 import { tokenInstance, tradingInstance } from "../contracts";
+import { fromWei } from "../utils/helper";
 import web3 from "../web3";
 
 // ***************** ERC20 Token Contract *************** //
@@ -12,8 +13,8 @@ export const getUserUSDTBalance = async (userAddress) => {
       return response;
     });
 
-  let finalAmount = web3.utils.fromWei(result.toString(), "ether");
-
+  let finalAmount = fromWei(result.toString(), 6);
+  console.log(result);
   return parseFloat(finalAmount).toFixed(2);
 };
 
@@ -26,6 +27,7 @@ export const checkUSDTApproved = async (userAddress, contractAddress) => {
     .call((err, response) => {
       return response;
     });
+
   return result;
 };
 // ***************** Trading Contract *************** //
