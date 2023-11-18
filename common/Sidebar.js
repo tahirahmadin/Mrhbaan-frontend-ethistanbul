@@ -2,21 +2,15 @@ import React, { useState } from "react";
 import { Box, useTheme, Typography, Paper, useMediaQuery } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useSelector, useDispatch } from "react-redux";
-import SearchIcon from "@mui/icons-material/Search";
 import {
   BarChart,
+  CurrencyExchange,
   Dashboard,
   EmojiEvents,
-  Explore,
-  Help,
+  History,
   Logout,
-  Telegram,
-  Timeline,
-  Wallet,
-  YouTube,
 } from "@mui/icons-material";
 import { setMenuIndex } from "../reducers/UiReducer";
-import Link from "next/link";
 import { constants } from "../utils/constants";
 import { useRouter } from "next/router";
 import { useWeb3Auth } from "../hooks/useWeb3Auth";
@@ -49,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: 14,
     lineHeight: 1,
-    color: "#f9f9f9",
+    color: "black",
   },
   selectedPaper: {
     display: "flex",
@@ -83,19 +77,19 @@ const SideBar = ({}) => {
         <Dashboard
           style={{
             marginRight: 10,
-            color: "#bdbdbd",
+            color: "black",
           }}
         />
       ),
     },
     {
-      title: "Strategy pools",
+      title: "Accumulate",
       url: "/pools",
       icon: (
         <EmojiEvents
           style={{
             marginRight: 10,
-            color: "#bdbdbd",
+            color: "black",
           }}
         />
       ),
@@ -107,19 +101,7 @@ const SideBar = ({}) => {
         <BarChart
           style={{
             marginRight: 10,
-            color: "#bdbdbd",
-          }}
-        />
-      ),
-    },
-    {
-      title: "Portfolio",
-      url: "/portfolio",
-      icon: (
-        <Wallet
-          style={{
-            marginRight: 10,
-            color: "#bdbdbd",
+            color: "black",
           }}
         />
       ),
@@ -127,187 +109,140 @@ const SideBar = ({}) => {
   ];
   return (
     <Box
-      style={{ position: "fixed" }}
       px={2}
       pt={3}
       pb={2}
-      bgcolor={"#0C0D10"}
+      bgcolor={"#ffffff"}
       display="flex"
       flexDirection="column"
       height="100%"
-      maxWidth={400}
-      minWidth={240}
+      maxWidth={200}
+      minWidth={150}
     >
       <Box>
         <Box py={2}>
-          <Typography variant="body2" pb={1} style={{ color: "white" }}>
+          <Typography variant="body2" pb={1} style={{ color: "black" }}>
             <img
-              src="https://www.sleepswap.io/SleepSwap_Plain.png"
-              height="45px"
+              src="https://pbs.twimg.com/profile_images/1663216871263571968/zdhir_s-_400x400.jpg"
+              height="36px"
+              style={{ borderRadius: "50%", marginRight: 7 }}
             />
             <strong>Sleep</strong>Swap
           </Typography>
         </Box>
-        <Link href="/portfolio" style={{ textDecoration: "none" }}>
-          <Box display={"flex"} justifyContent={"start"}>
-            <Box pr={1}>
-              <img
-                src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
-                style={{
-                  color: "white",
-                  height: 40,
-                  width: 40,
-                  borderRadius: 10,
-                }}
-              />
-            </Box>
-            <Box
-              display={"flex"}
-              flexDirection={"column"}
-              justifyContent={"center"}
-            >
-              <Typography
-                variant="smallheading"
-                style={{
-                  color: "white",
-                  fontWeight: 600,
-                }}
-              >
-                $23,435
-              </Typography>
-
-              <Typography
-                variant="small"
-                style={{ color: "#bdbdbd", lineHeight: 1 }}
-              >
-                Wallet Balance
-              </Typography>
-            </Box>
+        <Box display={"flex"} justifyContent={"start"}>
+          <Box pr={1}>
+            <img
+              src="https://cdn.pixabay.com/photo/2023/02/24/00/41/ai-generated-7809880_1280.jpg"
+              style={{
+                color: "white",
+                height: 40,
+                width: 40,
+                borderRadius: 10,
+              }}
+            />
           </Box>
-        </Link>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+          >
+            <Typography
+              variant="smallheading"
+              style={{
+                color: "black",
+                fontWeight: 600,
+              }}
+            >
+              $23,435
+            </Typography>
+
+            <Typography
+              variant="small"
+              style={{ color: "#414141", lineHeight: 1 }}
+            >
+              Wallet Balance
+            </Typography>
+          </Box>
+        </Box>
 
         <Box pt={5}>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <Box
-              key={10}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  router.pathname === "/"
-                    ? constants.highlighColor
-                    : "transparent",
+          <Box
+            onClick={() => dispatch(setMenuIndex(0))}
+            key={0}
+            className={classes.selectedPaper}
+            sx={{
+              boxShadow: 0,
+              bgcolor: menuIndex === 0 ? "#EEEFF3" : "transparent",
+            }}
+          >
+            <Dashboard
+              style={{
+                marginRight: 10,
+                color: menuIndex === 0 ? "#000000" : "#bdbdbd",
               }}
+            />
+
+            <Typography
+              variant="title1"
+              className={
+                menuIndex === 0 ? classes.selectedMenuTitle : classes.menuTitle
+              }
             >
-              <Dashboard
-                style={{
-                  marginRight: 10,
-                  color: "#bdbdbd",
-                }}
-              />
-
-              <Typography
-                variant="title1"
-                className={
-                  router.pathname === "/"
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Dashboard
-              </Typography>
-            </Box>
-          </Link>
-          {menuItems.slice(1).map((singleMenu, index) => {
-            return (
-              <Link href={singleMenu.url} style={{ textDecoration: "none" }}>
-                <Box
-                  key={index}
-                  className={classes.selectedPaper}
-                  sx={{
-                    boxShadow: 0,
-                    bgcolor: router.asPath.includes(singleMenu.url)
-                      ? constants.highlighColor
-                      : "transparent",
-                  }}
-                >
-                  {singleMenu.icon}
-
-                  <Typography
-                    variant="title1"
-                    className={
-                      router.asPath.includes(singleMenu.url)
-                        ? classes.selectedMenuTitle
-                        : classes.menuTitle
-                    }
-                  >
-                    {singleMenu.title}
-                  </Typography>
-                </Box>
-              </Link>
-            );
-          })}
-
-          <a href="https://t.me/sleepswapio" style={{ textDecoration: "none" }}>
-            <Paper
-              onClick={() => dispatch(setMenuIndex(5))}
-              key={5}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 5 ? constants.highlighColor : "transparent",
+              Dashboard
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => dispatch(setMenuIndex(1))}
+            key={1}
+            className={classes.selectedPaper}
+            sx={{
+              boxShadow: 0,
+              bgcolor: menuIndex === 1 ? "#EEEFF3" : "transparent",
+            }}
+          >
+            <CurrencyExchange
+              style={{
+                marginRight: 10,
+                color: menuIndex === 1 ? "#000000" : "#bdbdbd",
               }}
+            />
+
+            <Typography
+              variant="title1"
+              className={
+                menuIndex === 1 ? classes.selectedMenuTitle : classes.menuTitle
+              }
             >
-              <Telegram
-                style={{
-                  marginRight: 10,
-                  color: "white",
-                  color: menuIndex === 5 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 5
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Community
-              </Typography>
-            </Paper>
-          </a>
-          <a href="https://t.me/sleepswapio" style={{ textDecoration: "none" }}>
-            {" "}
-            <Paper
-              onClick={() => dispatch(setMenuIndex(6))}
-              key={6}
-              className={classes.selectedPaper}
-              sx={{
-                boxShadow: 0,
-                bgcolor:
-                  menuIndex === 6 ? constants.highlighColor : "transparent",
+              Accumulate
+            </Typography>
+          </Box>
+          <Box
+            onClick={() => dispatch(setMenuIndex(2))}
+            key={1}
+            className={classes.selectedPaper}
+            sx={{
+              boxShadow: 0,
+              bgcolor: menuIndex === 2 ? "#EEEFF3" : "transparent",
+            }}
+          >
+            <History
+              style={{
+                marginRight: 10,
+                color: menuIndex === 2 ? "#000000" : "#bdbdbd",
               }}
+            />
+
+            <Typography
+              variant="title1"
+              className={
+                menuIndex === 2 ? classes.selectedMenuTitle : classes.menuTitle
+              }
             >
-              <YouTube
-                style={{
-                  marginRight: 10,
-                  color: menuIndex === 6 ? "white" : "#bdbdbd",
-                }}
-              />
-              <Typography
-                variant="title1"
-                className={
-                  menuIndex === 6
-                    ? classes.selectedMenuTitle
-                    : classes.menuTitle
-                }
-              >
-                Academy
-              </Typography>
-            </Paper>
-          </a>
+              History
+            </Typography>
+          </Box>
+
           <Paper
             onClick={disconnect}
             key={0}
@@ -315,19 +250,19 @@ const SideBar = ({}) => {
             sx={{
               boxShadow: 0,
               bgcolor:
-                menuIndex === 7 ? constants.highlighColor : "transparent",
+                menuIndex === 4 ? constants.highlighColor : "transparent",
             }}
           >
             <Logout
               style={{
                 marginRight: 10,
-                color: menuIndex === 7 ? "white" : "#bdbdbd",
+                color: menuIndex === 4 ? "white" : "#bdbdbd",
               }}
             />
             <Typography
               variant="title1"
               className={
-                menuIndex === 7 ? classes.selectedMenuTitle : classes.menuTitle
+                menuIndex === 4 ? classes.selectedMenuTitle : classes.menuTitle
               }
             >
               Logout

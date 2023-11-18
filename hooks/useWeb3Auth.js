@@ -26,18 +26,18 @@ export const useWeb3Auth = () => {
       try {
         const chainConfig = {
           chainNamespace: CHAIN_NAMESPACES.EIP155,
-          chainId: "0x5",
+          chainId: "0x89",
           rpcTarget:
-            "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+            "https://polygon-mainnet.g.alchemy.com/v2/38R9Vnxi-6UPne8ACF4k4radrS8-6UJ1",
         };
         const options = {
           clientId: clientId,
           web3AuthNetwork: "testnet",
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x5",
+            chainId: "0x89",
             rpcTarget:
-              "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+              "https://polygon-mainnet.g.alchemy.com/v2/38R9Vnxi-6UPne8ACF4k4radrS8-6UJ1",
           },
           uiConfig: {
             theme: "dark",
@@ -61,9 +61,6 @@ export const useWeb3Auth = () => {
         };
 
         const openloginAdapter = new OpenloginAdapter({
-          // loginSettings: {
-          //   mfaLevel: "mandatory",
-          // },
           adapterSettings: {
             uxMode: "popup",
             whiteLabel: {
@@ -82,24 +79,21 @@ export const useWeb3Auth = () => {
           adapters: [openloginAdapter],
           modalConfig,
         });
-
-        console.log(web3AuthModalPack);
-
+        // await web3AuthModalPack.signOut();
         await ethersServiceProvider.setCurrentWeb3AuthInstance(
           web3AuthModalPack
         );
         setWeb3Auth(web3AuthModalPack);
 
-        console.log("hdjgbcfyhfsjvj");
-        console.log(web3AuthModalPack);
-
+        // let data = await web3AuthModalPack.getAddress();
+        // console.log("data");
+        // console.log(data);
         if (web3AuthModalPack.web3Auth) {
           let finalTemp = await web3AuthModalPack.web3Auth.provider;
-          console.log("finalTemp");
-          console.log(finalTemp);
+
           const web3 = new Web3(finalTemp);
 
-          const accounts = await web3.eth.getAccounts();
+          const accounts = (await web3.eth.getAccounts())[0];
           console.log(accounts);
           if (accounts) {
             await ethersServiceProvider.setCurrentAccount(accounts);

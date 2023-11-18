@@ -6,6 +6,7 @@ import Seo from "../common/Seo";
 import Header from "../components/resuableComponents/Header";
 import { useTopPoolInfo } from "../hooks/useTopPoolsInfo";
 import TradeCard from "../components/Trade/TradeCard";
+import SideBar from "../common/Sidebar";
 
 const useStyles = makeStyles((theme) => ({
   background: {
@@ -104,14 +105,20 @@ const Home = () => {
             <Header />
             <Box className={classes.background}>
               <Container>
-                <Grid container spacing={md ? 4 : 6} mb={md ? 5 : 6}>
-                  <Grid item md={3}></Grid>
-                  <Grid item md={6}>
+                <Grid
+                  container
+                  spacing={md ? 4 : 6}
+                  mb={md ? 5 : 6}
+                  display={"flex"}
+                  justifyContent={"space-around"}
+                >
+                  <Grid item md={3}>
+                    <SideBar />
+                  </Grid>
+                  <Grid item md={5}>
                     <TradeCard />
                   </Grid>
-                  <Grid item md={3}>
-                    Chat
-                  </Grid>
+                  <Grid item md={3}></Grid>
                 </Grid>
               </Container>
             </Box>

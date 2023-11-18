@@ -16,9 +16,8 @@ export const constants = {
   backend_url: "",
   backend_dev: "http://localhost:5004",
   contracts: {
-    fiat: "0xE118429D095de1a93951c67D04B523fE5cbAB62c",
-    accumulation: "0x319961073dA3983d46b0231913e00e73773cc7cC",
-    dca: "0x5FB1144544Bb46DD1179342BD6b3f4d2bF55dA75",
+    fiat: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+    trading: "0xD73624a0aaa1cc718Bea517A77868666B6082819",
   },
 };
 
@@ -29,4 +28,4 @@ export const STRATEGY_TYPE_ENUM = {
 };
 
 export const graphQueryUrl =
-  "https://api.thegraph.com/subgraphs/name/tahirahmadin/sleepswap";
+  "https://api.thegraph.com/subgraphs/name/tahirahmadin/sleepswap-ethistanbul";

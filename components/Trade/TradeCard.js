@@ -14,6 +14,12 @@ import {
 
 import { constants } from "../../utils/constants";
 import { Close } from "@mui/icons-material";
+import { tokenInstance, tradingInstance } from "../../contracts";
+import { useWeb3Auth } from "../../hooks/useWeb3Auth";
+import ethersServiceProvider from "../../services/ethersServiceProvider";
+import web3 from "../../web3";
+import { toWei } from "../../utils/helper";
+import { ethers } from "ethers";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -25,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 14,
     width: "100%",
     height: "100%",
-    border: "1px solid #bdbdbd",
+    border: "1px solid #f9f9f9",
     boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.03)",
     borderRadius: "1rem",
     "&:hover": {
@@ -45,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
   summaryCard: {
     // backgroundColor: "#ffffff",
     background: "linear-gradient(to bottom, #6385f3, #5a7ff2)",
+    backgroundImage: `url("eth-background.jpg"), linear-gradient(#eb01a5, #d13531)`,
+    backgroundSize: "cover",
     marginBottom: 5,
     paddingTop: 7,
     paddingBottom: 7,
@@ -131,9 +139,178 @@ export default function TradeCard() {
   const [token, setToken] = useState("Ethereum");
   const [frequency, setFrequency] = useState("1");
   const [time, setTime] = useState("1");
+  const [stakeCase, setStakeCase] = useState(0);
+
+  const { active, accountSC, web3AuthSC, connect, wallet } = useWeb3Auth();
+
+  const wmaticPolygon = "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270";
+  const usdtPolygon = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
+  };
+
+  const widget = async () => {
+    const response = await fetch(
+      "https://api-sandbox.gatefi.com/onramp/v1/buy?amount=10&crypto=BTC&fiat=USD&partnerAccountId=40ccf701-af56-4662-8681-5b9a9ca3fb22&payment=debit-credit-card&redirectUrl=google.com&region=US&walletAddress=mjEcj2LA3vj1nDi8ZD3QMCs9kNqVk7Dpee",
+      {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+          "access-control-allow-headers": "Accept",
+          "api-key": "eOLFHIEVQmwqJOAwWBOiFsfnNhncHigb",
+        },
+      }
+    );
+    const data = await response;
+    return data.url;
+  };
+
+  async function getCurrentBlockTimestamp() {
+    const polygonNodeUrl = "https://polygon-rpc.com";
+    const provider = new ethers.providers.JsonRpcProvider(polygonNodeUrl);
+
+    // Get the current block number
+    const currentBlockNumber = await provider.getBlockNumber();
+
+    // Get the current block
+    const currentBlock = await provider.getBlock(currentBlockNumber);
+    console.log("current block ", currentBlock);
+    // Get the timestamp of the current block
+    const currentBlockTimestamp = currentBlock.timestamp;
+
+    return currentBlockTimestamp;
+  }
+
+  async function generateTimestampSeries() {
+    const timestamps = [];
+    const currentTimestamp = await getCurrentBlockTimestamp(); // Math.floor(new Date().getTime() / 1000);
+
+    // Generate 5 timestamps with an increasing 10-minute interval
+    for (let i = 0; i < 5; i++) {
+      const timestamp = currentTimestamp + i * 600; // 600 seconds = 10 minutes
+      timestamps.push(timestamp);
+    }
+
+    return timestamps;
+  }
+
+  const handleApprove = async () => {
+    setStakeCase(1);
+
+    let userAddress = accountSC;
+    let trading_contract = constants.contracts.trading;
+    let provider = ethersServiceProvider.web3AuthInstance;
+    console.log(provider);
+
+    let data = await provider.getUserInfo();
+    console.log(data);
+    let tokenContract = tokenInstance(provider.web3Auth.provider);
+    try {
+      let estimateGas = await tokenContract.methods
+        .approve(trading_contract, "100000000000000000000000000")
+        .estimateGas({ from: userAddress });
+
+      let estimateGasPrice = await web3.eth.getGasPrice();
+      const response = await tokenContract.methods
+        .approve(trading_contract, "100000000000000000000000000")
+        .send(
+          {
+            from: userAddress,
+            maxPriorityFeePerGas: "50000000000",
+            gasPrice: parseInt(
+              (parseInt(estimateGasPrice) * 10) / 9
+            ).toString(),
+            gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+          },
+          async function (error, transactionHash) {
+            if (transactionHash) {
+              setStakeCase(2);
+            } else {
+              setStakeCase(4);
+            }
+          }
+        )
+        .on("receipt", async function (receipt) {
+          setStakeCase(3);
+          // setResetFlag(resetFlag + 1);
+        })
+        .on("error", async function (error) {
+          if (error?.code === 4001) {
+            setStakeCase(4);
+          } else {
+            setStakeCase(4);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+      setStakeCase(4);
+    }
+  };
+
+  const handleStake = async () => {
+    setStakeCase(1);
+
+    let userAddress = accountSC;
+    let trading_contract = constants.contracts.trading;
+    let provider = ethersServiceProvider.web3AuthInstance;
+    console.log(provider);
+    const amount0 = toWei("2", 6);
+    const amount1 = toWei("0");
+    const token0 = usdtPolygon;
+    const token1 = wmaticPolygon;
+    const startTimes = await generateTimestampSeries();
+
+    console.log("amounts ", { amount0, amount1 });
+
+    const params = [startTimes, amount0, amount1, token0, token1];
+
+    console.log("params ", params);
+
+    let data = await provider.getUserInfo();
+    console.log(data);
+    let tradingContract = tradingInstance(provider.web3Auth.provider);
+    console.log(tradingContract);
+    try {
+      let estimateGas = await tradingContract.methods
+        .startStrategyWithDeposit(...params)
+        .estimateGas({ from: userAddress });
+
+      let estimateGasPrice = await web3.eth.getGasPrice();
+      const response = await tradingContract.methods
+        .startStrategyWithDeposit(...params)
+        .send(
+          {
+            from: userAddress,
+            maxPriorityFeePerGas: "50000000000",
+            gasPrice: parseInt(
+              (parseInt(estimateGasPrice) * 10) / 9
+            ).toString(),
+            gas: parseInt((parseInt(estimateGas) * 10) / 9).toString(),
+          },
+          async function (error, transactionHash) {
+            if (transactionHash) {
+              setStakeCase(2);
+            } else {
+              setStakeCase(4);
+            }
+          }
+        )
+        .on("receipt", async function (receipt) {
+          setStakeCase(3);
+          setResetFlag(resetFlag + 1);
+        })
+        .on("error", async function (error) {
+          if (error?.code === 4001) {
+            setStakeCase(4);
+          } else {
+            setStakeCase(4);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+      setStakeCase(4);
+    }
   };
 
   return (
@@ -197,7 +374,7 @@ export default function TradeCard() {
               color={"#65CC6E"}
               textAlign={"center"}
             >
-              +12
+              +$12
             </Typography>
           </Box>
 
@@ -291,7 +468,20 @@ export default function TradeCard() {
             Beat the inflation with Crypto!
           </Typography>
         </Box>
-        <Button className={classes.buttonConnect} mt={2}>
+        <Button
+          className={classes.buttonConnect}
+          mt={2}
+          disabled={!accountSC}
+          onClick={handleApprove}
+        >
+          Approve
+        </Button>
+        <Button
+          className={classes.buttonConnect}
+          mt={2}
+          disabled={!accountSC}
+          onClick={handleStake}
+        >
           Buy Now
         </Button>
       </Box>

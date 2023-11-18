@@ -1,5 +1,6 @@
 import Web3 from "web3";
 import ERC20RG from "../abi/ERC20RG.json";
+import SleepSwapMasterChef from "../abi/SleepSwapMasterChef.json";
 
 import { constants } from "../utils/constants";
 
@@ -24,6 +25,21 @@ export const tokenInstance = (provider = "unavailable") => {
     );
 
     return tokenContract;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export const tradingInstance = (provider = "unavailable") => {
+  try {
+    var web3 = web3Instance(provider);
+    var tradingContract = new web3.eth.Contract(
+      SleepSwapMasterChef,
+      constants.contracts.trading
+    );
+
+    return tradingContract;
   } catch (err) {
     console.log(err);
     return null;

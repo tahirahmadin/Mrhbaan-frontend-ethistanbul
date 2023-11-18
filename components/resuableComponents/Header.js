@@ -183,7 +183,7 @@ const Header = () => {
                   >
                     <p
                       style={{
-                        color: "white",
+                        color: "black",
                         marginLeft: 10,
                         marginRight: 5,
                         marginTop: 15,
