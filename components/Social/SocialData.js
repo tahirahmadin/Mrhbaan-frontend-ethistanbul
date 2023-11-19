@@ -9,11 +9,8 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { constants } from "../../utils/constants";
 import {
-  Close,
   CurrencyBitcoin,
-  Lens,
   LensBlur,
   LocationCity,
   MyLocation,
@@ -57,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(''), linear-gradient(#E5E4E2, #E5E4E2)`,
     backgroundSize: "cover",
     marginBottom: 5,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 14,
+    paddingBottom: 14,
     paddingLeft: 14,
     paddingRight: 14,
     width: "100%",
@@ -81,8 +78,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   summaryCard: {
-    // backgroundColor: "#ffffff",
-
     background: "linear-gradient(to bottom, #D72B66, #D72B66)",
     backgroundImage: `url(''), linear-gradient(#808080, #808080)`,
     backgroundSize: "cover",
@@ -216,7 +211,7 @@ export default function SocialData() {
           textAlign={"center"}
           my={1}
         >
-          My Social Profile
+          My social profile
         </Typography>
         {socialDataValues && socialDataValues.length > 1 && (
           <Box className={classes.summaryCard}>
@@ -442,7 +437,6 @@ export default function SocialData() {
             </Box>{" "}
           </Box>
         )}
-
         <Typography
           variant="body2"
           fontSize={14}

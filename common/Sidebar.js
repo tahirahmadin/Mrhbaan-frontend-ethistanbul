@@ -9,6 +9,8 @@ import {
   EmojiEvents,
   History,
   Logout,
+  People,
+  Person,
   Savings,
 } from "@mui/icons-material";
 import { setMenuIndex, setUsdtBalanceOfUser } from "../reducers/UiReducer";
@@ -240,7 +242,7 @@ const SideBar = ({}) => {
               bgcolor: menuIndex === 2 ? "#EEEFF3" : "transparent",
             }}
           >
-            <Dashboard
+            <Person
               style={{
                 marginRight: 10,
                 color: menuIndex === 2 ? "#000000" : "#bdbdbd",
@@ -253,7 +255,7 @@ const SideBar = ({}) => {
                 menuIndex === 2 ? classes.selectedMenuTitle : classes.menuTitle
               }
             >
-              Portfolio
+              Profile
             </Typography>
           </Box>
           <Box

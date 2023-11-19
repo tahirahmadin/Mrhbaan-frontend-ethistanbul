@@ -160,46 +160,44 @@ const Header = () => {
                   )}
                 </Box>
               ) : (
-                <Link href="/portfolio" style={{ textDecoration: "none" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      height: 40,
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    height: 40,
 
-                      backgroundColor: "white",
-                      borderRadius: 4,
-                      marginRight: 1,
-                      fontWeight: 500,
+                    backgroundColor: "white",
+                    borderRadius: 4,
+                    marginRight: 1,
+                    fontWeight: 500,
+                  }}
+                >
+                  <p
+                    style={{
+                      color: "black",
+                      marginLeft: 10,
+                      marginRight: 5,
+                      marginTop: 15,
+                      fontWeight: 600,
+                      fontSize: matches ? 14 : 12,
                     }}
                   >
-                    <p
-                      style={{
-                        color: "black",
-                        marginLeft: 10,
-                        marginRight: 5,
-                        marginTop: 15,
-                        fontWeight: 600,
-                        fontSize: matches ? 14 : 12,
-                      }}
-                    >
-                      {accountSC &&
-                        accountSC.slice(0, 3) + "..." + accountSC.slice(38, 42)}
-                    </p>
+                    {accountSC &&
+                      accountSC.slice(0, 3) + "..." + accountSC.slice(38, 42)}
+                  </p>
 
-                    <Button
-                      color="secondary"
-                      style={{
-                        borderTopRightRadius: 14,
-                        borderBottomRightRadius: 14,
-                      }}
-                      className={classes.buttonConnect}
-                    >
-                      <Wallet />
-                    </Button>
-                  </Box>
-                </Link>
+                  <Button
+                    color="secondary"
+                    style={{
+                      borderTopRightRadius: 14,
+                      borderBottomRightRadius: 14,
+                    }}
+                    className={classes.buttonConnect}
+                  >
+                    <Wallet />
+                  </Button>
+                </Box>
               )}
             </Box>
           </Box>

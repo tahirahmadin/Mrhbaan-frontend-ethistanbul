@@ -478,7 +478,7 @@ export default function EatTheDip() {
               color={"#414141"}
               textAlign={"center"}
             >
-              Beat the inflation with Crypto!
+              Beat inflation with Crypto!
             </Typography>
           </Box>
 

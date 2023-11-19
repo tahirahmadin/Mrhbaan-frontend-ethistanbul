@@ -19,6 +19,7 @@ import { ethers } from "ethers";
 import { checkUSDTApproved } from "../../actions/smartActions";
 import { useSelector } from "react-redux";
 import EatTheDip from "./EatTheDip";
+import ProfileData from "../Social/ProfileData";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -165,10 +166,10 @@ export default function TradeCard() {
   }, [accountSC, refetch]);
 
   useEffect(() => {
-    if (amount && time && frequency) {
-      setTotalValue(amount * time * frequency);
+    if (amount && time) {
+      setTotalValue(amount * time);
     }
-  }, [amount, time, frequency]);
+  }, [amount, time]);
 
   const widget = async () => {
     const response = await fetch(
@@ -209,7 +210,7 @@ export default function TradeCard() {
 
     // Generate 5 timestamps with an increasing 10-minute interval
     for (let i = 0; i < 5; i++) {
-      const timestamp = currentTimestamp + i * 86400; // 86400 seconds = 1 day
+      const timestamp = currentTimestamp + i * 86400 * parseInt(frequency); // 86400 seconds = 1 day
       timestamps.push(timestamp);
     }
 
@@ -479,9 +480,9 @@ export default function TradeCard() {
                       onChange={(event) => setTime(event.target.value)}
                       className={classes.select}
                     >
-                      <option value="1">week</option>
-                      <option value="7">month</option>
-                      <option value="30">year</option>
+                      <option value="5">5 orders</option>
+                      <option value="10">10 orders</option>
+                      <option value="20">20 orders</option>
                     </select>
                   </Typography>
 
@@ -492,7 +493,7 @@ export default function TradeCard() {
                     color={"#414141"}
                     textAlign={"center"}
                   >
-                    Beat the inflation with Crypto!
+                    Beat inflation with Crypto!
                   </Typography>
                 </Box>
 
@@ -558,6 +559,7 @@ export default function TradeCard() {
           </Box>
         )}
         {menuIndex === 1 && <EatTheDip />}
+        {menuIndex === 2 && <ProfileData />}
       </Box>
     </Box>
   );
