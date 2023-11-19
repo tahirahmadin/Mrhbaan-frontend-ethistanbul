@@ -253,7 +253,7 @@ export default function TradeCard() {
           }
         )
         .on("receipt", async function (receipt) {
-          setStakeCase(3);
+          setApproveCase(3);
           setRefetch(refetch + 1);
         })
         .on("error", async function (error) {
