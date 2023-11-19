@@ -224,7 +224,7 @@ export default function TradeCard() {
     let trading_contract = constants.contracts.trading;
     let provider = ethersServiceProvider.web3AuthInstance;
 
-    let finalAmountToApprove = toWei(totalValue.toString(), 18);
+    let finalAmountToApprove = toWei(totalValue.toString(), 6);
 
     let tokenContract = tokenInstance(provider.web3Auth.provider);
     try {

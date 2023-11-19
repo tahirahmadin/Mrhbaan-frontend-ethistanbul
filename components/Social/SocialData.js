@@ -173,8 +173,9 @@ export default function SocialData() {
     if (accountSC) {
       async function asyncFn() {
         let web3Data = await getProfileDataWeb3(accountSC);
-        if (web3Data && web3Data.identity === null) {
-          return;
+        if (web3Data && web3Data.identity != null) {
+          setSocialDataValues(web3Data);
+          console.log(web3Data);
         }
         setSocialDataValues(web3Data);
         console.log(web3Data);
@@ -201,6 +202,8 @@ export default function SocialData() {
   }, [accountSC]);
   return (
     <Box pt={0} className={classes.card}>
+      {console.log("socialDataValues")}
+      {console.log(socialDataValues)}
       {accountSC && (
         <Box>
           <Typography
