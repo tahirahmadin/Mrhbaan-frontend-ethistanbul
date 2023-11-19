@@ -340,7 +340,7 @@ export default function TradeCard() {
 
         {menuIndex === 0 && (
           <Box>
-            {stakeCase === 0 && (
+            {stakeCase != 3 && (
               <Box>
                 <Typography
                   variant="body2"
@@ -510,7 +510,7 @@ export default function TradeCard() {
                   onClick={isApproved ? handleStake : handleApprove}
                 >
                   {isApproved ? "Buy Now" : "Approve Spending"}{" "}
-                  {approveCase > 0 && (
+                  {(approveCase > 0 || (stakeCase > 0 && stakeCase < 3)) && (
                     <CircularProgress
                       size={18}
                       style={{
