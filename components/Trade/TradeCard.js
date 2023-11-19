@@ -141,7 +141,7 @@ export default function TradeCard() {
   const [amount, setAmount] = useState("10");
   const [token, setToken] = useState("Ethereum");
   const [frequency, setFrequency] = useState(1);
-  const [time, setTime] = useState(1);
+  const [time, setTime] = useState(5);
   const [stakeCase, setStakeCase] = useState(0);
   const [approveCase, setApproveCase] = useState(0);
   const [refetch, setRefetch] = useState(0);
