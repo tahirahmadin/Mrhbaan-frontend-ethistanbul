@@ -190,7 +190,6 @@ export default function SocialData() {
         let web3Data = await getSocialProfileDataWeb3([
           "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
           "0x9D7117a07fca9F22911d379A9fd5118A5FA4F448",
-          "ekinci.eth",
         ]);
 
         console.log(web3Data);
