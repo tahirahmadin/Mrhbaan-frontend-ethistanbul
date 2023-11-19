@@ -26,7 +26,7 @@ export const getProfileDataWeb3 = async (userAddress) => {
       return res.data;
     })
     .catch((err) => {
-      return err;
+      return null;
     });
   return response;
 };
