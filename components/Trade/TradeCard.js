@@ -208,9 +208,10 @@ export default function TradeCard() {
     const timestamps = [];
     const currentTimestamp = await getCurrentBlockTimestamp(); // Math.floor(new Date().getTime() / 1000);
 
-    // Generate 5 timestamps with an increasing 10-minute interval
-    for (let i = 0; i < 5; i++) {
-      const timestamp = currentTimestamp + i * 86400 * parseInt(frequency); // 86400 seconds = 1 day
+    // Generate timestamps with an increasing interval
+    // Keeping 1 day= 10mins for demonstration
+    for (let i = 0; i < frequency; i++) {
+      const timestamp = currentTimestamp + i * 600 * parseInt(frequency); // 600 seconds = 10 minutes
       timestamps.push(timestamp);
     }
 
@@ -275,7 +276,8 @@ export default function TradeCard() {
     let userAddress = accountSC;
     let provider = ethersServiceProvider.web3AuthInstance;
 
-    const amount0 = toWei(amount.toString(), 6);
+    //Keeping amount is fixed 1 USDT per trade
+    const amount0 = toWei("1", 6);
     const amount1 = toWei("0");
     const token0 = usdtPolygon;
     const token1 = wmaticPolygon;
