@@ -4,22 +4,16 @@ import { GetPoolUserDataByAddress } from "../queries/graphQueries";
 import Web3 from "web3";
 import ethersServiceProvider from "../services/ethersServiceProvider";
 
-export function useUserPoolInfo(strategyType) {
+export function useUserPoolInfo() {
   let accountSC = ethersServiceProvider.currentAccount;
 
-  const [userData, setUserData] = useState({
-    totalOrders: null,
-    totalInvestedUSDT: null,
-    inOrderUSDT: null,
-    tokensAccumulated: null,
-    pnl: null,
-  });
+  const [userData, setUserData] = useState(null);
 
   const [getPoolUserDataQuery, { data, loading, error }] = useLazyQuery(
     GetPoolUserDataByAddress,
     {
       fetchPolicy: "network-only",
-      pollInterval: 1000,
+      pollInterval: 10000,
     }
   );
 
@@ -27,7 +21,8 @@ export function useUserPoolInfo(strategyType) {
     console.log("calling");
     if (accountSC) {
       getPoolUserDataQuery({
-        variables: { user: accountSC, type: strategyType },
+        variables: { user: accountSC },
+        // variables: { user: "0x8bd0e959e9a7273d465ac74d427ecc8aaaca55d8" },
       });
     }
   }, [accountSC]);
@@ -39,18 +34,9 @@ export function useUserPoolInfo(strategyType) {
     if (!data?.poolUsers) {
       return;
     }
-    let tempInvestment = data?.poolUsers?.[0]?.deposit
-      ? data?.poolUsers?.[0]?.deposit
-      : "0";
-    let tempInOrder = data?.poolUsers?.[0]?.fiatBalance
-      ? data?.poolUsers?.[0]?.fiatBalance
-      : "0";
-    setUserData({
-      totalOrders: data?.poolUsers?.[0]?.ordersCount,
-      totalInvestedUSDT: Web3.utils.fromWei(tempInvestment.toString(), "ether"),
-      inOrderUSDT: Web3.utils.fromWei(tempInOrder.toString(), "ether"),
-      tokensAccumulated: data?.poolUsers?.[0]?.tokenBalance,
-    });
+    console.log("data.poolUsers");
+    console.log(data.poolUsers);
+    setUserData(data.poolUsers);
   }, [data]);
 
   return {

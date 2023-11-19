@@ -28,15 +28,15 @@ export const GetPoolsDataQuery = gql`
 `;
 
 export const GetPoolUserDataByAddress = gql`
-  query GetPoolUserDataByAddress($user: String, $type: String) {
-    poolUsers(where: { user: $user, strategyType: $type }) {
-      tokenBalance
-      strategyType
-      ordersCount
-      id
-      fiatBalance
-      deposit
+  query GetPoolUserDataByAddress($user: String) {
+    poolUsers(where: { user: $user }) {
       user
+      tokenBalance
+      toAddress
+      gridSize
+      fiatBalance
+      amount0
+      id
     }
   }
 `;

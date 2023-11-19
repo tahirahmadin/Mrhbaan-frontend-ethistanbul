@@ -9,8 +9,8 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { constants } from "../../utils/constants";
 import {
+  Cancel,
   Close,
   CopyAll,
   CurrencyBitcoin,
@@ -21,10 +21,9 @@ import {
   Twitter,
 } from "@mui/icons-material";
 import { useWeb3Auth } from "../../hooks/useWeb3Auth";
-import {
-  getProfileDataWeb3,
-  getSocialProfileDataWeb3,
-} from "../../actions/serverActions";
+import { getProfileDataWeb3 } from "../../actions/serverActions";
+import { useUserPoolInfo } from "../../hooks/useUserPoolInfo";
+import { fromWei } from "../../utils/helper";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -175,6 +174,7 @@ export default function ProfileData() {
 
   const { accountSC } = useWeb3Auth();
 
+  const { userPoolInfo: activitiesData } = useUserPoolInfo();
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
@@ -183,7 +183,6 @@ export default function ProfileData() {
           return;
         }
         setSocialDataValues(web3Data);
-        console.log(web3Data);
       }
 
       asyncFn();
@@ -206,6 +205,7 @@ export default function ProfileData() {
       >
         My Social Profile
       </Typography>
+
       {socialDataValues && socialDataValues.length > 1 && (
         <Box className={classes.summaryCard}>
           <Box
@@ -459,6 +459,77 @@ export default function ProfileData() {
           </Typography>
         </Box>
       )}
+      <Typography
+        variant="body2"
+        fontSize={15}
+        fontWeight={700}
+        color={"#000000"}
+        textAlign={"center"}
+        my={1}
+      >
+        My Activities
+      </Typography>
+      {activitiesData &&
+        activitiesData.length > 0 &&
+        activitiesData.map((singleActivity) => {
+          return (
+            <Box className={classes.summaryCardOther}>
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"flex-start"}
+                  alignItems={"center"}
+                >
+                  <Box>
+                    <img
+                      src={
+                        "https://w7.pngwing.com/pngs/268/1013/png-transparent-ethereum-eth-hd-logo-thumbnail.png"
+                      }
+                      height="30px"
+                      width="30px"
+                      style={{ borderRadius: "50%" }}
+                    />
+                  </Box>
+                  <Box
+                    ml={1}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    justifyContent={"flex-start"}
+                    alignItems={"flex-start"}
+                  >
+                    <Typography
+                      fontSize={12}
+                      fontWeight={600}
+                      color={"#272727"}
+                      textAlign={"center"}
+                    >
+                      DCA for ${fromWei(singleActivity.amount0, 6)}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontSize={12}
+                      fontWeight={400}
+                      color={"#272727"}
+                      textAlign={"center"}
+                    >
+                      Daily | {singleActivity.gridSize} Orders
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Box>
+                  <Cancel />
+                </Box>
+              </Box>{" "}
+            </Box>
+          );
+        })}
     </Box>
   );
 }

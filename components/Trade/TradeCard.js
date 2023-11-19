@@ -278,7 +278,7 @@ export default function TradeCard() {
     let provider = ethersServiceProvider.web3AuthInstance;
 
     //Keeping amount is fixed 1 USDT per trade
-    const amount0 = toWei("1", 6);
+    const amount0 = toWei(amount.toString(), 6);
     const amount1 = toWei("0");
     const token0 = usdtPolygon;
     const token1 = wmaticPolygon;
@@ -335,9 +335,6 @@ export default function TradeCard() {
   return (
     <Box>
       <Box pt={0} className={classes.card}>
-        {console.log("approveCase")}
-        {console.log(approveCase)}
-
         {menuIndex === 0 && (
           <Box>
             {stakeCase != 3 && (
@@ -446,9 +443,9 @@ export default function TradeCard() {
                       onChange={(event) => setAmount(event.target.value)}
                       className={classes.select}
                     >
-                      <option value="10">$10</option>
-                      <option value="25">$25</option>
-                      <option value="50">$50</option>
+                      <option value="1">$1</option>
+                      <option value="2">$2</option>
+                      <option value="5">$5</option>
                     </select>{" "}
                     of
                     <select

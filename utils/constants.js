@@ -29,4 +29,4 @@ export const STRATEGY_TYPE_ENUM = {
 };
 
 export const graphQueryUrl =
-  "https://api.thegraph.com/subgraphs/name/tahirahmadin/sleepswap-ethistanbul";
+  "https://api.thegraph.com/subgraphs/name/tahirahmadin/sleepswap-istanbul";

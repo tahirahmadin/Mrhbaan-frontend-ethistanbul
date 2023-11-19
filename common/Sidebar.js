@@ -258,31 +258,6 @@ const SideBar = ({}) => {
               Profile
             </Typography>
           </Box>
-          <Box
-            onClick={() => dispatch(setMenuIndex(3))}
-            key={1}
-            className={classes.selectedPaper}
-            sx={{
-              boxShadow: 0,
-              bgcolor: menuIndex === 3 ? "#EEEFF3" : "transparent",
-            }}
-          >
-            <History
-              style={{
-                marginRight: 10,
-                color: menuIndex === 3 ? "#000000" : "#bdbdbd",
-              }}
-            />
-
-            <Typography
-              variant="title1"
-              className={
-                menuIndex === 3 ? classes.selectedMenuTitle : classes.menuTitle
-              }
-            >
-              History
-            </Typography>
-          </Box>
 
           <Paper
             onClick={disconnect}
