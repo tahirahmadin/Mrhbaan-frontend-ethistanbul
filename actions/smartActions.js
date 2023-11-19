@@ -27,7 +27,7 @@ export const checkUSDTApproved = async (userAddress, contractAddress) => {
     .call((err, response) => {
       return response;
     });
-
+  console.log(result);
   return result;
 };
 // ***************** Trading Contract *************** //

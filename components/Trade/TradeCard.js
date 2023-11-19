@@ -156,14 +156,15 @@ export default function TradeCard() {
   useEffect(() => {
     if (accountSC) {
       async function asyncFn() {
-        let trading_contract = constants.contracts.fiat;
+        let trading_contract = constants.contracts.trading;
         let res = await checkUSDTApproved(accountSC, trading_contract);
-
+        console.log("Approvedamount");
+        console.log(res);
         setIsApproved(parseInt(res) > 0);
       }
       asyncFn();
     }
-  }, [accountSC, refetch]);
+  }, [accountSC, refetch, approveCase]);
 
   useEffect(() => {
     if (amount && time) {
@@ -225,7 +226,7 @@ export default function TradeCard() {
     let trading_contract = constants.contracts.trading;
     let provider = ethersServiceProvider.web3AuthInstance;
 
-    let finalAmountToApprove = toWei(totalValue.toString(), 6);
+    let finalAmountToApprove = totalValue * 1000000;
 
     let tokenContract = tokenInstance(provider.web3Auth.provider);
     try {
@@ -254,7 +255,7 @@ export default function TradeCard() {
           }
         )
         .on("receipt", async function (receipt) {
-          setApproveCase(3);
+          setApproveCase(0);
           setRefetch(refetch + 1);
         })
         .on("error", async function (error) {
@@ -334,6 +335,9 @@ export default function TradeCard() {
   return (
     <Box>
       <Box pt={0} className={classes.card}>
+        {console.log("approveCase")}
+        {console.log(approveCase)}
+
         {menuIndex === 0 && (
           <Box>
             {stakeCase === 0 && (
@@ -506,7 +510,7 @@ export default function TradeCard() {
                   onClick={isApproved ? handleStake : handleApprove}
                 >
                   {isApproved ? "Buy Now" : "Approve Spending"}{" "}
-                  {(approveCase > 0 || stakeCase > 0) && (
+                  {approveCase > 0 && (
                     <CircularProgress
                       size={18}
                       style={{
