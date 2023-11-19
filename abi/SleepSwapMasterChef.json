@@ -6,7 +6,9 @@
         "internalType": "contract ISwapRouter",
         "name": "_swapRouter",
         "type": "address"
-      }
+      },
+      { "internalType": "address", "name": "_rrpAddress", "type": "address" },
+      { "internalType": "address", "name": "_proxyAddress", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -249,8 +251,21 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "airnodeRrp",
+    "outputs": [
+      {
+        "internalType": "contract IAirnodeRrpV0",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
-      { "internalType": "uint256[]", "name": "_orderIds", "type": "uint256[]" }
+      { "internalType": "int256[]", "name": "_orderIds", "type": "int256[]" }
     ],
     "name": "executeOrders",
     "outputs": [],
@@ -269,6 +284,53 @@
     "name": "feePercent",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "requestId", "type": "bytes32" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "fulfill",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "fulfilledData",
+    "outputs": [{ "internalType": "int256", "name": "", "type": "int256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "hasUserPositionActive",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "name": "incomingFulfillments",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "airnode", "type": "address" },
+      { "internalType": "bytes32", "name": "endpointId", "type": "bytes32" },
+      { "internalType": "address", "name": "sponsor", "type": "address" },
+      { "internalType": "address", "name": "sponsorWallet", "type": "address" },
+      { "internalType": "bytes", "name": "parameters", "type": "bytes" }
+    ],
+    "name": "makeRequest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -332,6 +394,23 @@
     "inputs": [],
     "name": "positionsCount",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxyAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "readDataFeed",
+    "outputs": [
+      { "internalType": "int224", "name": "value", "type": "int224" },
+      { "internalType": "uint256", "name": "timestamp", "type": "uint256" }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -409,22 +488,8 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "tokenBalance",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "tokenBalances",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "tokenFees",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -463,24 +528,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "usdtBalance",
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "address", "name": "_token", "type": "address" }
+    ],
+    "name": "userAvailableBalance",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "usdtFees",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "userAwailableBalance",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -502,6 +556,16 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "airnode", "type": "address" },
+      { "internalType": "address", "name": "sponsorWallet", "type": "address" }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "_token", "type": "address" },
       { "internalType": "uint256", "name": "_amount", "type": "uint256" }
     ],
@@ -509,5 +573,6 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
-  }
+  },
+  { "stateMutability": "payable", "type": "receive" }
 ]

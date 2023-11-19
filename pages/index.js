@@ -94,9 +94,9 @@ const Home = () => {
   return (
     <Box style={{ backgroundColor: "#f9f9f9" }}>
       <Seo
-        title="SleepSwap - Beat The Inflation"
-        description="SleepSwap - Beat The Inflation project is developed in the Eth Istanbul Hackathon"
-        keywords="NextJs Starter Kit"
+        title="Mrhbaan  - Beat The Inflation"
+        description="Mrhbaan  - Beat The Inflation project is developed in the Eth Istanbul Hackathon"
+        keywords="Mrhbaan App"
         image="SleepSwap_Thumb.jpg"
       />
 

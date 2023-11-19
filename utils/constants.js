@@ -17,7 +17,7 @@ export const constants = {
   backend_dev: "http://localhost:5004",
   contracts: {
     fiat: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-    trading: "0xD73624a0aaa1cc718Bea517A77868666B6082819",
+    trading: "0x999b4AcC65b997454De2601Bb9d6BdC2B33238C5",
     eatTheDip: "0xD73624a0aaa1cc718Bea517A77868666B6082819",
   },
 };

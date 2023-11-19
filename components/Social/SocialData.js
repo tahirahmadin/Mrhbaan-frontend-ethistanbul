@@ -201,313 +201,328 @@ export default function SocialData() {
   }, [accountSC]);
   return (
     <Box pt={0} className={classes.card}>
-      <Box>
-        <Typography
-          variant="body2"
-          fontSize={20}
-          fontWeight={700}
-          color={"#000000"}
-          textAlign={"center"}
-          my={1}
-        >
-          My social profile
-        </Typography>
-        {socialDataValues && socialDataValues.length > 1 && (
-          <Box className={classes.summaryCard}>
-            <Box
-              display={"flex"}
-              flexDirection={"column"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Typography
-                fontSize={12}
-                fontWeight={600}
-                color={"#f9f9f9"}
-                textAlign={"center"}
+      {accountSC && (
+        <Box>
+          <Typography
+            variant="body2"
+            fontSize={20}
+            fontWeight={700}
+            color={"#000000"}
+            textAlign={"center"}
+            my={1}
+          >
+            My social profile
+          </Typography>
+          {socialDataValues && socialDataValues.length > 1 && (
+            <Box className={classes.summaryCard}>
+              <Box
+                display={"flex"}
+                flexDirection={"column"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
               >
-                {socialDataValues && (
+                <Typography
+                  fontSize={12}
+                  fontWeight={600}
+                  color={"#f9f9f9"}
+                  textAlign={"center"}
+                >
+                  {socialDataValues && (
+                    <Box>
+                      <img
+                        src={socialDataValues[1].avatar}
+                        height="100px"
+                        width="100px"
+                        style={{ borderRadius: "50%" }}
+                      />
+                    </Box>
+                  )}
+                  {socialDataValues[1].displayName}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontSize={12}
+                  fontWeight={400}
+                  color={"#ffffff"}
+                  textAlign={"center"}
+                >
+                  {socialDataValues && socialDataValues[1].identity}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontSize={12}
+                  fontWeight={400}
+                  color={"#ffffff"}
+                  textAlign={"center"}
+                >
+                  {socialDataValues && socialDataValues[1].description}
+                </Typography>
+                <Box
+                  mt={1}
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <Box
+                    style={{ color: "white" }}
+                    display={"flex"}
+                    justifyContent={"flex-start"}
+                    alignItems={"center"}
+                    mr={2}
+                  >
+                    <LocationCity style={{ color: "white" }} />{" "}
+                    <Typography
+                      variant="body2"
+                      fontSize={12}
+                      fontWeight={400}
+                      color={"#ffffff"}
+                      textAlign={"center"}
+                    >
+                      {socialDataValues[1].location}
+                    </Typography>
+                  </Box>
+                  <Box
+                    style={{ color: "white" }}
+                    display={"flex"}
+                    justifyContent={"flex-end"}
+                    alignItems={"center"}
+                    ml={2}
+                  >
+                    <MyLocation style={{ color: "white" }} />{" "}
+                    <Typography
+                      variant="body2"
+                      fontSize={12}
+                      fontWeight={400}
+                      color={"#ffffff"}
+                      textAlign={"center"}
+                    >
+                      India
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>{" "}
+              {socialDataValues &&
+                socialDataValues.length > 1 &&
+                socialDataValues[1].links && (
+                  <Box
+                    mt={1}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <Box
+                      style={{ color: "white" }}
+                      display={"flex"}
+                      justifyContent={"flex-end"}
+                      alignItems={"center"}
+                    >
+                      {socialDataValues[1].links?.hey && (
+                        <a href={socialDataValues[1].links.hey.link}>
+                          <IconButton
+                            style={{
+                              backgroundColor: "#464646",
+                              color: "white",
+                              height: 32,
+                              width: 32,
+                            }}
+                          >
+                            <LensBlur style={{ color: "white" }} />
+                          </IconButton>
+                        </a>
+                      )}
+                    </Box>
+                    <Box
+                      style={{ color: "white" }}
+                      display={"flex"}
+                      justifyContent={"flex-end"}
+                      alignItems={"center"}
+                      ml={2}
+                    >
+                      <Typography
+                        variant="body2"
+                        fontSize={12}
+                        fontWeight={500}
+                        color={"#ffffff"}
+                        textAlign={"center"}
+                      >
+                        {socialDataValues[1].links?.twitter && (
+                          <a href={socialDataValues[1].links.twitter.link}>
+                            <IconButton
+                              style={{
+                                backgroundColor: "#1E9CEA",
+                                color: "white",
+                                height: 32,
+                                width: 32,
+                              }}
+                            >
+                              <Twitter style={{ color: "white" }} />
+                            </IconButton>
+                          </a>
+                        )}
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{ color: "white" }}
+                      display={"flex"}
+                      justifyContent={"flex-end"}
+                      alignItems={"center"}
+                      ml={2}
+                    >
+                      <Typography
+                        variant="body2"
+                        fontSize={12}
+                        fontWeight={500}
+                        color={"#ffffff"}
+                        textAlign={"center"}
+                      >
+                        {socialDataValues[1].address && (
+                          <a
+                            href={`https://polygonscan.com/address/${socialDataValues[1].address}`}
+                          >
+                            <IconButton
+                              style={{
+                                backgroundColor: "#F2A900",
+                                color: "white",
+                                height: 32,
+                                width: 32,
+                              }}
+                            >
+                              <CurrencyBitcoin style={{ color: "white" }} />
+                            </IconButton>
+                          </a>
+                        )}
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
+            </Box>
+          )}
+
+          {!socialDataValues && (
+            <Box className={classes.summaryCard}>
+              <Box
+                display={"flex"}
+                flexDirection={"column"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Typography
+                  fontSize={12}
+                  fontWeight={600}
+                  color={"black"}
+                  textAlign={"center"}
+                >
                   <Box>
                     <img
-                      src={socialDataValues[1].avatar}
+                      src={
+                        "https://as1.ftcdn.net/v2/jpg/05/99/32/28/1000_F_599322870_hufBazDahX69a57xhcprgfn4WSjAlXZj.jpg"
+                      }
                       height="100px"
                       width="100px"
                       style={{ borderRadius: "50%" }}
                     />
                   </Box>
-                )}
-                {socialDataValues[1].displayName}
-              </Typography>
-              <Typography
-                variant="body2"
-                fontSize={12}
-                fontWeight={400}
-                color={"#ffffff"}
-                textAlign={"center"}
-              >
-                {socialDataValues && socialDataValues[1].identity}
-              </Typography>
-              <Typography
-                variant="body2"
-                fontSize={12}
-                fontWeight={400}
-                color={"#ffffff"}
-                textAlign={"center"}
-              >
-                {socialDataValues && socialDataValues[1].description}
-              </Typography>
-              <Box
-                mt={1}
-                display={"flex"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-              >
-                <Box
-                  style={{ color: "white" }}
-                  display={"flex"}
-                  justifyContent={"flex-start"}
-                  alignItems={"center"}
-                  mr={2}
-                >
-                  <LocationCity style={{ color: "white" }} />{" "}
-                  <Typography
-                    variant="body2"
-                    fontSize={12}
-                    fontWeight={400}
-                    color={"#ffffff"}
-                    textAlign={"center"}
-                  >
-                    {socialDataValues[1].location}
-                  </Typography>
-                </Box>
-                <Box
-                  style={{ color: "white" }}
-                  display={"flex"}
-                  justifyContent={"flex-end"}
-                  alignItems={"center"}
-                  ml={2}
-                >
-                  <MyLocation style={{ color: "white" }} />{" "}
-                  <Typography
-                    variant="body2"
-                    fontSize={12}
-                    fontWeight={400}
-                    color={"#ffffff"}
-                    textAlign={"center"}
-                  >
-                    India
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>{" "}
-            {socialDataValues &&
-              socialDataValues.length > 1 &&
-              socialDataValues[1].links && (
-                <Box
-                  mt={1}
-                  display={"flex"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
-                  <Box
-                    style={{ color: "white" }}
-                    display={"flex"}
-                    justifyContent={"flex-end"}
-                    alignItems={"center"}
-                  >
-                    {socialDataValues[1].links?.hey && (
-                      <a href={socialDataValues[1].links.hey.link}>
-                        <IconButton
-                          style={{
-                            backgroundColor: "#464646",
-                            color: "white",
-                            height: 32,
-                            width: 32,
-                          }}
-                        >
-                          <LensBlur style={{ color: "white" }} />
-                        </IconButton>
-                      </a>
-                    )}
-                  </Box>
-                  <Box
-                    style={{ color: "white" }}
-                    display={"flex"}
-                    justifyContent={"flex-end"}
-                    alignItems={"center"}
-                    ml={2}
-                  >
-                    <Typography
-                      variant="body2"
-                      fontSize={12}
-                      fontWeight={500}
-                      color={"#ffffff"}
-                      textAlign={"center"}
-                    >
-                      {socialDataValues[1].links?.twitter && (
-                        <a href={socialDataValues[1].links.twitter.link}>
-                          <IconButton
-                            style={{
-                              backgroundColor: "#1E9CEA",
-                              color: "white",
-                              height: 32,
-                              width: 32,
-                            }}
-                          >
-                            <Twitter style={{ color: "white" }} />
-                          </IconButton>
-                        </a>
-                      )}
-                    </Typography>
-                  </Box>
-                  <Box
-                    style={{ color: "white" }}
-                    display={"flex"}
-                    justifyContent={"flex-end"}
-                    alignItems={"center"}
-                    ml={2}
-                  >
-                    <Typography
-                      variant="body2"
-                      fontSize={12}
-                      fontWeight={500}
-                      color={"#ffffff"}
-                      textAlign={"center"}
-                    >
-                      {socialDataValues[1].address && (
-                        <a
-                          href={`https://polygonscan.com/address/${socialDataValues[1].address}`}
-                        >
-                          <IconButton
-                            style={{
-                              backgroundColor: "#F2A900",
-                              color: "white",
-                              height: 32,
-                              width: 32,
-                            }}
-                          >
-                            <CurrencyBitcoin style={{ color: "white" }} />
-                          </IconButton>
-                        </a>
-                      )}
-                    </Typography>
-                  </Box>
-                </Box>
-              )}
-          </Box>
-        )}
+                  No Name
+                </Typography>
 
-        {!socialDataValues && (
-          <Box className={classes.summaryCard}>
-            <Box
-              display={"flex"}
-              flexDirection={"column"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Typography
-                fontSize={12}
-                fontWeight={600}
-                color={"black"}
-                textAlign={"center"}
-              >
-                <Box>
-                  <img
-                    src={
-                      "https://as1.ftcdn.net/v2/jpg/05/99/32/28/1000_F_599322870_hufBazDahX69a57xhcprgfn4WSjAlXZj.jpg"
-                    }
-                    height="100px"
-                    width="100px"
-                    style={{ borderRadius: "50%" }}
-                  />
-                </Box>
-                No Name
-              </Typography>
+                <Typography
+                  variant="body2"
+                  fontSize={12}
+                  fontWeight={400}
+                  color={"#ffffff"}
+                  textAlign={"center"}
+                >
+                  No data found,Please create NextId.
+                </Typography>
+              </Box>{" "}
+            </Box>
+          )}
+          <Typography
+            variant="body2"
+            fontSize={14}
+            fontWeight={700}
+            color={"#000000"}
+            textAlign={"center"}
+            my={1}
+          >
+            Top users
+          </Typography>
+          {topUsersData.length > 0 && (
+            <Box>
+              {topUsersData.map((singleUserData, index) => {
+                return (
+                  singleUserData &&
+                  singleUserData[1] && (
+                    <Box
+                      className={classes.summaryCardOther}
+                      style={{
+                        backgroundImage:
+                          index === 1 &&
+                          `url(''), linear-gradient(#E5E4E2, #E5E4E2)`,
+                      }}
+                    >
+                      <Box
+                        display={"flex"}
+                        flexDirection={"row"}
+                        justifyContent={"flex-start"}
+                        alignItems={"center"}
+                      >
+                        <Box>
+                          <img
+                            src={singleUserData[1].avatar}
+                            height="30px"
+                            width="30px"
+                            style={{ borderRadius: "50%" }}
+                          />
+                        </Box>
+                        <Box
+                          ml={1}
+                          display={"flex"}
+                          flexDirection={"column"}
+                          justifyContent={"flex-start"}
+                          alignItems={"flex-start"}
+                        >
+                          <Typography
+                            fontSize={12}
+                            fontWeight={600}
+                            color={"#272727"}
+                            textAlign={"center"}
+                          >
+                            {singleUserData[1].displayName}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            fontSize={12}
+                            fontWeight={400}
+                            color={"#272727"}
+                            textAlign={"center"}
+                          >
+                            {singleUserData && singleUserData[1].identity}
+                          </Typography>
+                        </Box>
+                      </Box>{" "}
+                    </Box>
+                  )
+                );
+              })}
+            </Box>
+          )}
+          {}
+        </Box>
+      )}
 
-              <Typography
-                variant="body2"
-                fontSize={12}
-                fontWeight={400}
-                color={"#ffffff"}
-                textAlign={"center"}
-              >
-                No data found,Please create NextId.
-              </Typography>
-            </Box>{" "}
-          </Box>
-        )}
+      {!accountSC && (
         <Typography
           variant="body2"
-          fontSize={14}
-          fontWeight={700}
+          fontSize={12}
+          fontWeight={400}
           color={"#000000"}
           textAlign={"center"}
-          my={1}
+          mt={3}
         >
-          Top users
+          Login first to see details
         </Typography>
-        {topUsersData.length > 0 && (
-          <Box>
-            {topUsersData.map((singleUserData, index) => {
-              return (
-                singleUserData &&
-                singleUserData[1] && (
-                  <Box
-                    className={classes.summaryCardOther}
-                    style={{
-                      backgroundImage:
-                        index === 1 &&
-                        `url(''), linear-gradient(#E5E4E2, #E5E4E2)`,
-                    }}
-                  >
-                    <Box
-                      display={"flex"}
-                      flexDirection={"row"}
-                      justifyContent={"flex-start"}
-                      alignItems={"center"}
-                    >
-                      <Box>
-                        <img
-                          src={singleUserData[1].avatar}
-                          height="30px"
-                          width="30px"
-                          style={{ borderRadius: "50%" }}
-                        />
-                      </Box>
-                      <Box
-                        ml={1}
-                        display={"flex"}
-                        flexDirection={"column"}
-                        justifyContent={"flex-start"}
-                        alignItems={"flex-start"}
-                      >
-                        <Typography
-                          fontSize={12}
-                          fontWeight={600}
-                          color={"#272727"}
-                          textAlign={"center"}
-                        >
-                          {singleUserData[1].displayName}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          fontSize={12}
-                          fontWeight={400}
-                          color={"#272727"}
-                          textAlign={"center"}
-                        >
-                          {singleUserData && singleUserData[1].identity}
-                        </Typography>
-                      </Box>
-                    </Box>{" "}
-                  </Box>
-                )
-              );
-            })}
-          </Box>
-        )}
-        {}
-      </Box>
+      )}
     </Box>
   );
 }

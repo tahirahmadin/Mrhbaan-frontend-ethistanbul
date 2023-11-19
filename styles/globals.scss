@@ -74,3 +74,105 @@ p {
     opacity: 1;
   }
 }
+
+.w3a-modal__inner {
+  min-height: 300px !important;
+  border-radius: 22px !important;
+  max-width: 400px !important;
+  color: #fff !important;
+
+  background-color: #08090c !important;
+  border-color: #08090c;
+}
+
+.w3a-modal__content p,
+.w3a-modal__content input,
+.w3a-modal__content button,
+.w3a-modal__content div,
+.w3a-modal__content li {
+  font-size: 13px !important;
+  background-color: #08090c !important;
+}
+.w3a-modal__content {
+  min-height: 290px !important;
+  background-color: #08090c !important;
+}
+.w3a-modal .w3a-group {
+  margin-bottom: 1rem !important;
+  background-color: #08090c !important;
+}
+
+.w3a-modal ul.w3a-adapter-list.w3a-adapter-list--shrink {
+  max-height: 50px !important;
+  //   overflow: scroll !important;
+  background-color: #08090c !important;
+}
+
+.w3a-modal__content input {
+  background-color: #08090c !important;
+  height: 33px !important;
+  line-height: 100%;
+  padding: 0 0.75rem !important;
+  border-radius: 16px !important;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+.w3a-modal__content button {
+  height: 40px !important;
+  line-height: 100%;
+  padding: 0 0.75rem !important;
+  border-radius: 22px !important;
+  background-color: #08090c !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border-color: 3px solid #f9f9f9;
+}
+.w3ajs-passwordless-form button,
+.w3ajs-external-wallet button {
+  background-color: #0032ff !important;
+  border: 1px solid #0032ff !important;
+  color: #f9f9f9 !important;
+}
+
+.w3a-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.w3a-header__logo {
+  width: 60px !important;
+  img {
+    height: 60px !important;
+    width: 60px !important;
+    object-fit: contain !important;
+  }
+}
+.w3a-header__title {
+  color: #fff !important;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: 26px !important;
+}
+.w3a-header__subtitle {
+  color: #fff !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 5px !important;
+  font-size: 14px !important;
+}
+.w3a-modal__footer {
+  display: none;
+}

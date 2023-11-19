@@ -1,4 +1,4 @@
-# SleepSwap - Beat The Inflation
+# Mrhbaan - Beat The Inflation
 
 A web app that helps users shield money from currency devaluation. It simplifies crypto investment via web2 login and smart contracts, offering options like dollar-cost averaging with 5% interest via sDAI and token accumulation for advanced traders.
 

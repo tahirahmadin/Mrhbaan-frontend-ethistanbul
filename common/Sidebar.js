@@ -139,11 +139,11 @@ const SideBar = ({}) => {
         <Box py={2}>
           <Typography variant="body2" pb={1} style={{ color: "black" }}>
             <img
-              src="https://pbs.twimg.com/profile_images/1663216871263571968/zdhir_s-_400x400.jpg"
+              src="Mrhbaan_logo_black.png"
               height="36px"
               style={{ borderRadius: "50%", marginRight: 7 }}
             />
-            <strong>Sleep</strong>Swap
+            <strong>Mrhbaan </strong>Finance
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"start"}>
