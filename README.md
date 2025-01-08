@@ -6,7 +6,7 @@
 This project was recognized for its innovative use of decentralized APIs and Next.Id social account integration.  
 Explore the winning showcase here: [Mrhbaan on EthGlobal](https://ethglobal.com/showcase/amca-4wo1i)
 
-![Mrhbaan Logo]([./logo.png](https://sleepswap-istanbul.vercel.app/Mrhbaan_logo_black.png))
+![Mrhbaan App][./layout.jpg]
 
 ## 🌟 Key Features
 
@@ -42,15 +42,16 @@ Visit the GitHub repository to explore the project:
 
 ## 📸 Screenshots
 
-| Authentication Screen       | Investment Dashboard      |
-| --------------------------- | ------------------------- |
-| ![Authentication](./auth.png) | ![Dashboard](./dashboard.png) |
+| Authentication Screen           | Investment Dashboard            |
+| ------------------------------- | ------------------------------- |
+| ![Authentication](./layout.png) | ![Dashboard](./transaction.png) |
 
-## 🌐 EthGlobal Istanbul Showcase  
+## 🌐 EthGlobal Istanbul Showcase
 
-This project was presented at **EthGlobal Istanbul** and won prizes for:  
-- **API3**: Innovative use of Airnode and dAPI for protected swaps.  
-- **Next.Id**: Integrating Next.Id for a seamless social account display.  
+This project was presented at **EthGlobal Istanbul** and won prizes for:
+
+- **API3**: Innovative use of Airnode and dAPI for protected swaps.
+- **Next.Id**: Integrating Next.Id for a seamless social account display.
 
 View the project details on EthGlobal:  
 [Mrhbaan Showcase on EthGlobal](https://ethglobal.com/showcase/amca-4wo1i)
