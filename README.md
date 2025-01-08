@@ -6,7 +6,7 @@
 This project was recognized for its innovative use of decentralized APIs and Next.Id social account integration.  
 Explore the winning showcase here: [Mrhbaan on EthGlobal](https://ethglobal.com/showcase/amca-4wo1i)
 
-![Mrhbaan App][./layout.jpg]
+![Mrhbaan App](./layout.jpg)
 
 ## 🌟 Key Features
 
@@ -42,9 +42,9 @@ Visit the GitHub repository to explore the project:
 
 ## 📸 Screenshots
 
-| Authentication Screen           | Investment Dashboard            |
-| ------------------------------- | ------------------------------- |
-| ![Authentication](./layout.png) | ![Dashboard](./transaction.png) |
+| Main Screen           | Investment Dashboard            |
+| --------------------- | ------------------------------- |
+| ![Main](./layout.jpg) | ![Dashboard](./transaction.jpg) |
 
 ## 🌐 EthGlobal Istanbul Showcase
 
